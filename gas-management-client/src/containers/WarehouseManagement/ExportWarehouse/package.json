@@ -1,0 +1,6 @@
+{
+    "name": "ExportWarehouse",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./ExportWarehouse.js"
+}

@@ -1,0 +1,6 @@
+{
+    "name": "StaffManagement",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./StaffManagement.js"
+}
