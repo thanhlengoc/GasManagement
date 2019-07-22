@@ -7,100 +7,75 @@ import Breadcrumb from '../../components/Breadcrumb/';
 import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
 import Dashboard from '../../views/Dashboard/';
-import Colors from '../../views/Theme/Colors/';
-import Typography from '../../views/Theme/Typography/';
 import Charts from '../../views/Charts/';
-// Base
-import Switches from '../../views/Base/Switches/';
-import Tabs from '../../views/Base/Tabs/';
-// Editors
-import TextEditors from '../../views/Editors/TextEditors';
-import CodeEditors from '../../views/Editors/CodeEditors';
-// Forms
-import BasicForms from '../../views/Forms/BasicForms/';
-import AdvancedForms from '../../views/Forms/AdvancedForms';
 import GoogleMaps from '../../views/GoogleMaps/';
-// Notifications
-import Alerts from '../../views/Notifications/Alerts/';
-import Badges from '../../views/Notifications/Badges/';
-import Modals from '../../views/Notifications/Modals/';
-import Toastr from '../../views/Notifications/Toastr/';
-// Plugins
 import Calendar from '../../views/Plugins/Calendar/';
-import Spinners from '../../views/Plugins/Spinners/';
-
 import CustomerManagement from '../CustomerManagement';
 import StaffManagement from '../StaffManagement';
 import Invoice from '../BillManagement/Invoice';
-import IncomeSpend from '../BillManagement/IncomeSpend';
-import EnterWarehouse from '../WarehouseManagement/EnterWarehouse';
-import ExportWarehouse from '../WarehouseManagement/ExportWarehouse';
 import WarehouseManagement from '../WarehouseManagement/WarehouseManagement';
-import {getCurrentUser} from "../../api/userApi";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
+import {getCurrentUser, getRoleOfCurrentUser} from "../../services/AuthService";
 
 
 class Full extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      role: [],
-      currentUser: {}
+      roles: [],
+      currentUser: {},
+      fullName: ''
     }
   }
 
   componentDidMount() {
+    getRoleOfCurrentUser().then(res => {
+      this.setState({
+        roles: res.data
+      })
+    }).catch(err => {
+      console.log(err);
+      toast.error("get role of current user fail.")
+    });
+
     getCurrentUser().then(res => {
       this.setState({
-        role: res.data.roles,
-        currentUser: res.data
+        currentUser: res.data,
+        fullName: res.data.fullName
       })
-    }).catch(toast.error('login fail!'))
+    }).catch(err => {
+      console.log(err);
+      toast.error("get current user fail.")
+    });
   }
 
   render() {
     return (
       <div className="app">
-        <Header />
+        <Header fullName={this.state.fullName}/>
         <div className="app-body">
           <Sidebar {...this.props}/>
           <main className="main">
-            <Breadcrumb />
-            <Container fluid>
+            <Breadcrumb/>
+            <Container fluid style={{padding:'0 15px'}}>
               <Switch>
-                <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
-
-                <Route path="/customer-management" name="CustomerManagement" component={CustomerManagement}/>
-                <Route path="/staff-management" name="StaffManagement" component={StaffManagement}/>
-                <Route path="/bill-management/invoice" name="Invoice" component={Invoice}/>
-                <Route path="/bill-management/income-spend" name="IncomeAndSpend" component={IncomeSpend}/>
-                <Route path="/warehouse-management" name="Warehouse" component={WarehouseManagement}/>
-                <Route path="/warehouse-management/enter" name="EnterWarehouse" component={EnterWarehouse}/>
-                <Route path="/warehouse-management/export" name="ExportWarehouse" component={ExportWarehouse}/>
-                <Route path="/plugins/calendar" name="Calendar" component={Calendar}/>
-                <Route path="/google-maps" name="Google Maps" component={GoogleMaps}/>
-
-                <Route path="/theme/colors" name="Colors" component={Colors}/>
-                <Route path="/theme/typography" name="Typography" component={Typography}/>
-                <Route path="/base/switches" name="Swithces" component={Switches}/>
-                <Route path="/base/tabs" name="Tabs" component={Tabs}/>
-                <Route path="/charts" name="Charts" component={Charts}/>
-                <Route path="/editors/text-editors" name="Text Editors" component={TextEditors}/>
-                <Route path="/editors/code-editors" name="Code Editors" component={CodeEditors}/>
-                <Route path="/forms/basic-forms" name="Basic Forms" component={BasicForms}/>
-                <Route path="/forms/advanced-forms" name="Advanced Forms" component={AdvancedForms}/>
-                <Route path="/notifications/alerts" name="Alerts" component={Alerts}/>
-                <Route path="/notifications/badges" name="Badges" component={Badges}/>
-                <Route path="/notifications/modals" name="Modals" component={Modals}/>
-                <Route path="/notifications/toastr" name="Toastr" component={Toastr}/>
-                <Route path="/plugins/spinners" name="Loading Buttons" component={Spinners}/>
-                <Redirect from="/" to="/dashboard"/>
+                <Route exact path="/dashboard" name="Dashboard" component={Dashboard}/>
+                <Route exact path="/customer" name="CustomerManagement"
+                       component={()=><CustomerManagement fullName={this.state.fullName}/>}/>
+                <Route exact path="/staff" name="StaffManagement" component={StaffManagement}/>
+                <Route exact path="/bill/invoice" name="Invoice" component={Invoice}/>
+                <Route exact path="/warehouse" name="Warehouse" component={WarehouseManagement}/>
+                <Route exact path="/plugins/calendar" name="Calendar" component={Calendar}/>
+                <Route exact path="/google-maps" name="Google Maps" component={GoogleMaps}/>
+                <Route exact path="/charts" name="Charts" component={Charts}/>
+                <Redirect from="/" to="/plugins/calendar"/>
               </Switch>
             </Container>
           </main>
           <Aside />
         </div>
         <Footer />
+        <ToastContainer position="top-right" autoClose={2000} style={{zIndex:'1999'}}/>
       </div>
     );
   }

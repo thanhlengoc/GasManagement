@@ -46,22 +46,10 @@ const events = [
     end: new Date(currYear, currMonth, 9, 0, 0, 0)
   },
   {
-    title: 'Conference',
-    start: new Date(currYear, currMonth, 11),
-    end: new Date(currYear, currMonth, 13),
-    desc: 'Big conference for important people'
-  },
-  {
     title: 'Meeting',
     start: new Date(currYear, currMonth, 12, 10, 30, 0, 0),
     end: new Date(currYear, currMonth, 12, 12, 30, 0, 0),
     desc: 'Pre-meeting meeting, to prepare for the meeting'
-  },
-  {
-    title: 'Lunch',
-    start: new Date(currYear, currMonth, 12, 12, 0, 0, 0),
-    end: new Date(currYear, currMonth, 12, 13, 0, 0, 0),
-    desc: 'Power lunch'
   },
   {
     title: 'Meeting',
@@ -80,24 +68,9 @@ const events = [
     end: new Date(currYear, currMonth, 12, 21, 0, 0, 0)
   },
   {
-    title: 'Birthday Party',
+    title: 'Today',
     start: new Date(currYear, currMonth, 13, 7, 0, 0),
     end: new Date(currYear, currMonth, 13, 10, 30, 0)
-  },
-  {
-    title: 'Birthday Party 2',
-    start: new Date(currYear, currMonth, 13, 7, 0, 0),
-    end: new Date(currYear, currMonth, 13, 10, 30, 0)
-  },
-  {
-    title: 'Birthday Party 3',
-    start: new Date(currYear, currMonth, 13, 7, 0, 0),
-    end: new Date(currYear, currMonth, 13, 10, 30, 0)
-  },
-  {
-    title: 'Late Night Event',
-    start: new Date(currYear, currMonth, 17, 19, 30, 0),
-    end: new Date(currYear, currMonth, 18, 2, 0, 0)
   },
   {
     title: 'Multi-day Event',
@@ -118,15 +91,10 @@ class Calendar extends Component {
     return (
       <div className="animated">
         <Card>
-          <CardHeader>
-            <i className="icon-calendar"></i>Calendar
-            <div className="card-actions">
-              <a href="https://github.com/intljusticemission/react-big-calendar">
-                <small className="text-muted">docs</small>
-              </a>
-            </div>
-          </CardHeader>
-          <CardBody style={{height: '40em'}}>
+          {/*<CardHeader>*/}
+            {/*<strong><i className="icon-calendar"></i> Calendar</strong>*/}
+          {/*</CardHeader>*/}
+          <CardBody style={{height: '40em',padding:'0.5em'}}>
             <BigCalendar className="d-sm-down-none"
               {...this.props}
               events={events}

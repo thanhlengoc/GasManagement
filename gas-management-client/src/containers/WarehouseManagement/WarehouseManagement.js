@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
 import {
   Row, Col, Card, CardHeader, CardBody,
-  Input,
-  InputGroup,
   Button,
-  Collapse,
   Nav,
   NavItem,
   NavLink,
@@ -12,439 +9,74 @@ import {
   TabPane,
   FormGroup, FormText,
   Label,
-  Modal,
-  ModalHeader, ModalBody, ModalFooter, Badge
+  Modal, ModalHeader,
+  Table as TableReactstrap, Input, ModalBody, ModalFooter, Badge, Collapse
 } from 'reactstrap';
 import classnames from 'classnames';
 import {DateRangePicker} from "react-dates";
+import 'react-dates/lib/css/_datepicker.css';
+import 'react-dates/initialize'
 import moment from 'moment';
-
-import {Table, Tag} from 'antd';
-import 'antd/dist/antd.css';
-
-const columnsInput = [
-  {
-    title: <strong>Ngày nhập</strong>,
-    dataIndex: 'date',
-    key: 'date',
-    width: 120,
-    fixed: 'left',
-  },
-  {
-    title: <strong>Nhập theo loại</strong>,
-    children: [
-      {
-        title: <strong>Elf Gas</strong>,
-        children: [
-          {
-            title: <strong>Elf 6kg</strong>,
-            dataIndex: 'elf6kg',
-            key: 'elf6kg',
-            width: 100,
-            render: elf6kg => {
-              return (
-                  <span>
-                    <Tag color='#f5222d' key={elf6kg}>
-                      {elf6kg}
-                    </Tag>
-                  </span>
-                  )
-            }
-          },
-          {
-            title: <strong>Elf 12Kg</strong>,
-            dataIndex: 'elf12kg',
-            key: 'elf12kg',
-            width: 100,
-            render: elf12kg => {
-              return (
-                  <span>
-                    <Tag color='#f5222d' key={elf12kg}>
-                      {elf12kg}
-                    </Tag>
-                  </span>
-              )
-            }
-          },
-          {
-            title: <strong>Elf 39Kg</strong>,
-            dataIndex: 'elf39kg',
-            key: 'elf39kg',
-            width: 100,
-            render: elf39kg => {
-              return (
-                  <span>
-                    <Tag color='#f5222d' key={elf39kg}>
-                      {elf39kg}
-                    </Tag>
-                  </span>
-              )
-            }
-          },
-        ]
-      },
-      {
-        title: <strong>PM</strong>,
-        children: [
-          {
-            title: <strong>B12</strong>,
-            dataIndex: 'b12',
-            key: 'b12',
-            width: 100,
-            render: b12 => {
-              return (
-                  <span>
-                    <Tag color='#fa541c' key={b12}>
-                      {b12}
-                    </Tag>
-                  </span>
-              )
-            }
-          },
-          {
-            title: <strong>B45</strong>,
-            dataIndex: 'b45',
-            key: 'b45',
-            width: 100,
-            render: b45 => {
-              return (
-                  <span>
-                    <Tag color='#fa541c' key={b45}>
-                      {b45}
-                    </Tag>
-                  </span>
-              )
-            }
-          },
-
-        ],
-      },
-      {
-        title: <strong>Khác</strong>,
-        dataIndex: 'other',
-        key: 'other',
-        width: 100,
-        render: other => {
-          return (
-            <span>
-              <Tag color='#fa8c16' key={other}>
-                {other}
-              </Tag>
-            </span>
-          )
-        }
-      },
-      {
-        title: <strong>Đơn vị</strong>,
-        dataIndex: 'unit',
-        key: 'unit',
-        width: 100,
-        render: unit => {
-          return (
-            <span>
-              <Tag color='#fa8c16' key={unit}>
-                {unit}
-              </Tag>
-            </span>
-          )
-        }
-      },
-      {
-        title: <strong>Đơn giá</strong>,
-        children: [
-          {
-            title: <strong>Elf 6kg</strong>,
-            dataIndex: 'unitPriceElf6kg',
-            key: 'unitPriceElf6kg',
-            width: 100,
-          },
-          {
-            title: <strong>Elf 12kg</strong>,
-            dataIndex: 'unitPriceElf12kg',
-            key: 'unitPriceElf12kg',
-            width: 100,
-          },
-          {
-            title: <strong>Elf 39kg</strong>,
-            dataIndex: 'unitPriceElf39kg',
-            key: 'unitPriceElf39kg',
-            width: 100,
-          },
-          {
-            title: <strong>B12</strong>,
-            dataIndex: 'unitPriceB12',
-            key: 'unitPriceB12',
-            width: 100,
-          },
-          {
-            title: <strong>B45</strong>,
-            dataIndex: 'unitPriceB45',
-            key: 'unitPriceB45',
-            width: 100,
-          },
-        ]
-      },
-      {
-        title: <strong>Trả vỏ</strong>,
-        children: [
-          {
-            title: <strong>Elf 6kg</strong>,
-            dataIndex: 'payShellElf6kg',
-            key: 'payShellElf6kg',
-            width: 100,
-          },
-          {
-            title: <strong>Elf 12kg</strong>,
-            dataIndex: 'payShellElf12kg',
-            key: 'payShellElf12kg',
-            width: 100,
-          },
-          {
-            title: <strong>Elf 39kg</strong>,
-            dataIndex: 'payShellElf39kg',
-            key: 'payShellElf39kg',
-            width: 100,
-          },
-          {
-            title: <strong>B12</strong>,
-            dataIndex: 'payShellB12',
-            key: 'payShellB12',
-            width: 100,
-          },
-          {
-            title: <strong>B45</strong>,
-            dataIndex: 'payShellB45',
-            key: 'payShellB45',
-            width: 100,
-          },
-        ]
-      },
-    ],
-  },
-  {
-    title: <strong>Nhập KM</strong>,
-    children: [
-      {
-        title: <strong>Dầu</strong>,
-        dataIndex: 'oilCooking',
-        key: 'oilCooking',
-        width: 100,
-        render: oilCooking => {
-          return (
-              <span>
-              <Tag color='#7cb305' key={oilCooking}>
-                {oilCooking}
-              </Tag>
-            </span>
-          )
-        }
-      },
-      {
-        title: <strong>Đường</strong>,
-        dataIndex: 'sugar',
-        key: 'sugar',
-        width: 100,
-        render: sugar => {
-          return (
-              <span>
-              <Tag color='#7cb305' key={sugar}>
-                {sugar}
-              </Tag>
-            </span>
-          )
-        }
-      },
-      {
-        title: <strong>Ly</strong>,
-        dataIndex: 'glass',
-        key: 'glass',
-        width: 100,
-        render: glass => {
-          return (
-              <span>
-              <Tag color='#7cb305' key={glass}>
-                {glass}
-              </Tag>
-            </span>
-          )
-        }
-      },
-    ],
-  },
-  {
-    title: <strong>Thành tiền</strong>,
-    dataIndex: 'totalMoney',
-    key: 'totalMoney',
-    width: 150,
-  },
-  {
-    title: <strong>Trả tiền</strong>,
-    dataIndex: 'payment',
-    key: 'payment',
-    width: 150,
-  },
-  {
-    title: <strong>Công nợ</strong>,
-    children: [
-      {
-        title: <strong>Tiền</strong>,
-        dataIndex: 'debtMoney',
-        key: 'debtMoney',
-        width: 100,
-      },
-      {
-        title: <strong>Elf 6kg</strong>,
-        dataIndex: 'debtElf6kg',
-        key: 'debtElf6kg',
-        width: 100,
-      },
-      {
-        title: <strong>Elf 12kg</strong>,
-        dataIndex: 'debtElf12kg',
-        key: 'debtElf12kg',
-        width: 100,
-      },
-      {
-        title: <strong>Elf 39kg</strong>,
-        dataIndex: 'debtElf39kg',
-        key: 'debtElf39kg',
-        width: 100,
-      },
-      {
-        title: <strong>B12</strong>,
-        dataIndex: 'debtB12',
-        key: 'debtB12',
-        width: 100,
-      },
-      {
-        title: <strong>B45</strong>,
-        dataIndex: 'debtB45',
-        key: 'debtB45',
-        width: 100,
-      },
-    ],
-  },
-];
-
-const dataInput = [];
-for (let i = 0; i < 100; i++) {
-  dataInput.push({
-    key: i,
-    date: '09/07/2019',
-    elf6kg: '300',
-    elf12kg: '300',
-    elf39kg: '300',
-    b12: '500',
-    b45: '400',
-    other: 'bếp',
-    unit: 'cái, bình',
-    unitPriceElf6kg: '240,000',
-    unitPriceElf12kg: '12,360,000',
-    unitPriceElf39kg: '420,000',
-    unitPriceB12: '15,360,000',
-    unitPriceB45: '230,000',
-    oilCooking: '100',
-    sugar: '200',
-    glass: '500',
-  });
-}
-
-const columnsOutput = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    width: 100,
-    fixed: 'left',
-  },
-  {
-    title: 'Other',
-    children: [
-      {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
-        width: 200,
-        sorter: (a, b) => a.age - b.age,
-      },
-      {
-        title: 'Address',
-        children: [
-          {
-            title: 'Street',
-            dataIndex: 'street',
-            key: 'street',
-            width: 200,
-          },
-          {
-            title: 'Block',
-            children: [
-              {
-                title: 'Building',
-                dataIndex: 'building',
-                key: 'building',
-                width: 100,
-              },
-              {
-                title: 'Door No.',
-                dataIndex: 'number',
-                key: 'number',
-                width: 100,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: 'Company',
-    children: [
-      {
-        title: 'Company Address',
-        dataIndex: 'companyAddress',
-        key: 'companyAddress',
-        width: 200,
-      },
-      {
-        title: 'Company Name',
-        dataIndex: 'companyName',
-        key: 'companyName',
-      },
-    ],
-  },
-  {
-    title: 'Gender',
-    dataIndex: 'gender',
-    key: 'gender',
-    width: 100,
-  },
-];
-const dataOutput = [];
-for (let i = 0; i < 100; i++) {
-  dataOutput.push({
-    key: i,
-    name: 'John Brown',
-    age: i + 1,
-    street: 'Lake Park',
-    building: 'C',
-    number: 2035,
-    companyAddress: 'Lake Street 42',
-    companyName: 'SoftLake Co',
-    gender: 'M',
-  });
-}
+import DatePicker from "react-datepicker";
+import '../../../scss/_custom.scss';
+import {getAllGasType, saveGasType} from "../../api/gasType";
+import TableExistEnd from "./TableExistEnd";
+import TableOutWarehouse from "./TableOutWarehouse";
+import TableInWarehouse from "./TableInWarehouse";
 
 class WarehouseManagement extends Component {
   constructor(props) {
     super(props);
     this.state = {
       activeTab: '1',
+      startDate: null,
+      endDate: null,
+      modal: false,
+      dateInWarehouse: null,
 
+      listAllGasType: null,
+      code: '',
+      gasName: '',
+      weight: 0,
+      color: '',
+      unitPrice: 0,
+
+      collapseNTL: false,
+      collapseNKM: false,
+      collapseTV: false,
+      totalMoney: 0,
+      payment: 0,
+      oil: 0,
+      sugar: 0,
+      glass: 0,
+      elf6kg: 0,
+      elf12kg: 0,
+      elf39kg: 0,
+      b12: 0,
+      b45: 0,
+      payShellElf6kg: 0,
+      payShellElf12kg: 0,
+      payShellElf39kg: 0,
+      payShellB12: 0,
+      payShellB45:0
     };
 
     this.toggleTab = this.toggleTab.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
+
+  toggleNLT = () => {
+    this.setState(state => ({collapseNTL: !state.collapseNTL}));
+  };
+
+  toggleNKM = () => {
+    this.setState(state => ({collapseNKM: !state.collapseNKM}));
+  };
+
+  toggleTV = () => {
+    this.setState(state => ({collapseTV: !state.collapseTV}));
+  };
 
   toggleTab(tab) {
     if (this.state.activeTab !== tab) {
@@ -454,9 +86,53 @@ class WarehouseManagement extends Component {
     }
   }
 
+  toggleModal() {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
+  }
+
+  onDateChange = (from, to) => {
+    this.setState({
+      startDate: from,
+      endDate: to
+    });
+  };
+
+  handleChange(event) {
+    this.setState({[event.target.name]: event.target.value})
+  }
+
+  onChangeDateInWarehouse = (date) => {
+    this.setState({
+      dateInWarehouse: date
+    })
+  };
+
+  componentDidMount() {
+    getAllGasType().then(res => {
+      this.setState({
+        listAllGasType: res.data.result
+      })
+    })
+  }
+
+  handleSaveGasType = () => {
+    const {code, gasName, weight, color, unitPrice} = this.state;
+    const request = {
+      code: code ? code : '',
+      gasName: gasName ? gasName : '',
+      weight: weight ? weight : 0,
+      color: color ? color : '',
+      unitPrice: unitPrice ? unitPrice : 0
+    };
+    saveGasType(request)
+  };
+
   render() {
     let month = moment().format("DD/MM/YYYY");
     let lastMonth = moment().startOf('month').format("DD/MM/YYYY");
+    const {listAllGasType} = this.state;
 
     return (
         <div className="animated fadeIn parent-padding">
@@ -470,108 +146,395 @@ class WarehouseManagement extends Component {
                           {active: this.state.activeTab === '1'})}
                                onClick={() => {
                                  this.toggleTab('1');
-                               }}><strong><i className="fa fa-search"></i> Thông tin kho</strong>
+                               }}><strong><i className="fa fa-search"></i> Thông
+                        tin kho</strong>
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink className={classnames(
+                          {active: this.state.activeTab === '2'})}
+                               onClick={() => {
+                                 this.toggleTab('2');
+                               }}><strong><i className="fa fa-plus"/> Loại
+                        Gas</strong>
                       </NavLink>
                     </NavItem>
                   </Nav>
                 </CardHeader>
-                <CardBody>
-                  <TabContent activeTab={this.state.activeTab}>
-                    <TabPane tabId='1'>
-                      <CardBody>
+                <TabContent activeTab={this.state.activeTab}>
+                  <TabPane tabId='1'>
+                    <Row>
+                      <Col xs={12} sm={12}>
+                        <FormGroup>
+                          <Label htmlFor="name">Thời gian</Label>
+                          <Col xs="auto" className="pl-0">
+                            <DateRangePicker
+                                startDate={this.state.startDate}
+                                endDate={this.state.endDate}
+
+                                startDateId="startDate"
+                                endDateId="endDate"
+
+                                startDatePlaceholderText={lastMonth}
+                                endDatePlaceholderText={month}
+
+                                displayFormat="DD/MM/YYYY"
+                                onDatesChange={
+                                  ({startDate, endDate}) => this.onDateChange(
+                                      startDate, endDate)
+                                }
+
+                                focusedInput={this.state.focusedInput}
+                                onFocusChange={
+                                  focusedInput => this.setState(
+                                      {focusedInput})
+                                }
+                                orientation={this.state.orientation}
+                                openDirection={this.state.openDirection}
+                                isOutsideRange={() => false}
+                                minimumNights={0}
+                            />
+                            <Button type="button" color="success"
+                                    style={{
+                                      maxWidth: "150px",
+                                      maxHeight: '50px',
+                                      marginLeft: '20px',
+                                      position: 'relative',
+                                      top: '-10px'
+                                    }}
+                            >
+                              <i className="fa fa-search"></i> Tìm kiếm
+                            </Button>
+                          </Col>
+                          <FormText className="help-block">Tìm kiếm theo
+                            tháng.</FormText>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <hr/>
+                    <Row>
+                      <Col xs={12} sm={12}>
+                        <Badge color="secondary" style={{marginBottom: '5px'}}>
+                          <h4>Nhập kho</h4>
+                        </Badge>
+                        <Button color="info" className="pull-right"
+                                onClick={() => this.toggleModal()}>
+                          <i className="fa fa-plus"/> Thêm mới
+                        </Button>
+                        <TableInWarehouse/>
+                      </Col>
+                    </Row>
+                    <hr/>
+                    <Badge color="secondary" style={{marginBottom: '5px'}}>
+                      <h4>Xuất bán</h4>
+                    </Badge>
+                    <TableOutWarehouse/>
+                    <hr/>
+                    <Badge color="secondary" style={{marginBottom: '5px'}}>
+                      <h4>Tồn cuối</h4>
+                    </Badge>
+                    <TableExistEnd/>
+                  </TabPane>
+                  <TabPane tabId='2'>
+                    <Row style={{marginBottom: '20px'}}>
+                      <Col xs="12" sm="12">
                         <Row>
-                          <Col xs={12} sm={12}>
+                          <Col xs="12" sm="4">
                             <FormGroup>
-                              <Label htmlFor="name">Thời gian tìm kiếm</Label>
-                              <Col xs="auto" className="pl-0">
-                                <DateRangePicker
-                                    startDate={this.state.startDate}
-                                    endDate={this.state.endDate}
-
-                                    startDateId="startDate"
-                                    endDateId="endDate"
-
-                                    startDatePlaceholderText={lastMonth}
-                                    endDatePlaceholderText={month}
-
-                                    displayFormat="DD/MM/YYYY"
-                                    onDatesChange={
-                                      ({startDate, endDate}) => this.onDateChange(
-                                          startDate, endDate)
-                                    }
-
-                                    focusedInput={this.state.focusedInput}
-                                    onFocusChange={
-                                      focusedInput => this.setState(
-                                          {focusedInput})
-                                    }
-                                    orientation={this.state.orientation}
-                                    openDirection={this.state.openDirection}
-                                    isOutsideRange={() => false}
-                                    minimumNights={0}
-                                />
-                                <Button type="button" color="success"
-                                        style={{maxWidth: "150px", maxHeight:'50px',marginLeft:'20px',
-                                          position:'relative',top:'-10px'}}
-                                >
-                                  <i className="fa fa-search"></i> Tìm kiếm
-                                </Button>
-                              </Col>
-                              <FormText className="help-block">Tìm kiếm theo tháng.</FormText>
+                              <Label htmlFor="text-input">Mã bình ga</Label>
+                              <Input type="text" id="text-input"
+                                     placeholder="Mã bình ga"
+                                     value={this.state.code}
+                                     onChange={(e) => this.setState(
+                                         {code: e.target.value})}/>
+                            </FormGroup>
+                          </Col>
+                          <Col xs="12" sm="4">
+                            <FormGroup>
+                              <Label htmlFor="text-input">Tên loại</Label>
+                              <Input type="text" id="text-input"
+                                     placeholder="Tên loại"
+                                     value={this.state.gasName}
+                                     onChange={(e) => this.setState(
+                                         {gasName: e.target.value})}
+                                     required/>
+                            </FormGroup>
+                          </Col>
+                          <Col xs="12" sm="4">
+                            <FormGroup>
+                              <Label htmlFor="text-input">Cân nặng</Label>
+                              <Input type="text" id="text-input"
+                                     placeholder="Cân nặng"
+                                     value={this.state.weight}
+                                     onChange={(e) => this.setState(
+                                         {weight: e.target.value})}/>
                             </FormGroup>
                           </Col>
                         </Row>
-                      </CardBody>
-                      <CardBody>
                         <Row>
-                          <h2 style={{marginLeft:'15px'}}><Badge color='warning'>Nhập kho</Badge></h2>
-                          <Button type="submit" color="primary"
-                                  style={{marginLeft:'10px',height:'fit-content'}}
-                          >
-                            <i className="fa fa-plus"/> Lập phiếu nhập kho</Button>
+                          <Col xs="12" sm="4">
+                            <FormGroup>
+                              <Label htmlFor="text-input">Màu sắc</Label>
+                              <Input type="text" id="text-input"
+                                     placeholder="Màu sắc"
+                                     value={this.state.color}
+                                     onChange={(e) => this.setState(
+                                         {color: e.target.value})}/>
+                            </FormGroup>
+                          </Col>
+                          <Col xs="12" sm="4">
+                            <FormGroup>
+                              <Label htmlFor="text-input">Đơn giá</Label>
+                              <Input type="text" id="text-input"
+                                     placeholder="Đơn giá"
+                                     value={this.state.unitPrice}
+                                     onChange={(e) => this.setState(
+                                         {unitPrice: e.target.value})}/>
+                            </FormGroup>
+                          </Col>
                         </Row>
-                          <Table
-                              columns={columnsInput}
-                              dataSource={dataInput}
-                              bordered
-                              size="middle"
-                              scroll={{ x: '290%', y: 390 }}
-                          />
-                      </CardBody>
-                      <CardBody>
-                        <Row>
-                          <h2 style={{marginLeft:'15px'}}><Badge color='warning'>Xuất bán</Badge></h2>
-                          <Button type="submit" color="primary"
-                                  style={{marginLeft:'10px',height:'fit-content'}}
-                          >
-                            <i className="fa fa-plus"/> Lập hóa đơn bán</Button>
-                        </Row>
-                          <Table
-                              columns={columnsOutput}
-                              dataSource={dataOutput}
-                              bordered
-                              size="middle"
-                              scroll={{ x: '130%', y: 240 }}
-                          />
-                      </CardBody>
-                      <CardBody>
-                        <Row>
-                          <h2 style={{marginLeft:'15px'}}><Badge color='warning'>Tồn cuối</Badge></h2>
-                        </Row>
-                          <Table
-                              columns={columnsOutput}
-                              dataSource={dataOutput}
-                              bordered
-                              size="middle"
-                              scroll={{ x: '130%', y: 240 }}
-                          />
-                      </CardBody>
-                    </TabPane>
-                  </TabContent>
-                </CardBody>
+                        <Button color="success"
+                                onClick={() => this.handleSaveGasType()}
+                                style={{marginBottom: '20px'}}>
+                          <i className="fa fa-plus"/> Thêm Loại Gas</Button>
+                        <TableReactstrap responsive striped>
+                          <thead>
+                          <tr>
+                            <th>TT</th>
+                            <th>Mã bình</th>
+                            <th>Tên Loại</th>
+                            <th>Cân nặng</th>
+                            <th>Màu sắc</th>
+                            <th>Đơn giá nhập</th>
+                            <th>Đơn giá bán</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          {
+                            listAllGasType ? listAllGasType.map(
+                                (item, index) => {
+                                  return (
+                                      <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>{item.code}</td>
+                                        <td>{item.gasName}</td>
+                                        <td>{item.weight + " kg"}</td>
+                                        <td>{item.color}</td>
+                                        <td>{item.unitPriceIn}</td>
+                                        <td>{item.unitPriceOut}</td>
+                                      </tr>
+                                  )
+                                })
+                                : null
+                          }
+                          </tbody>
+                        </TableReactstrap>
+                      </Col>
+                    </Row>
+                  </TabPane>
+                </TabContent>
               </Card>
             </Col>
           </Row>
+
+          <Modal isOpen={this.state.modal} toggle={this.toggleModal}
+                 className={this.props.className}>
+            <ModalHeader toggle={this.toggleModal}
+                         style={{textAlign: 'center'}}>
+              <strong>Thêm phiếu nhập</strong>
+            </ModalHeader>
+            <ModalBody>
+              <Col xs={12} sm={12}>
+                <FormGroup row>
+                  <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                    <strong>Ngày nhập:</strong>
+                  </Label>
+                  <DatePicker
+                      className="form-control"
+                      placeholderText={month}
+                      selected={this.state.startDatePurchase}
+                      onChange={() => this.onChangeDateInWarehouse()}
+                      dateFormat="DD/MM/YYYY"
+                  />
+                </FormGroup>
+                <FormGroup row>
+                  <Button color="info" onClick={() => this.toggleNLT()}
+                          style={{marginBottom: '1rem'}}>Nhập theo loại</Button>
+                  <Collapse isOpen={this.state.collapseNTL}>
+                    <Card>
+                      <CardBody>
+                        <Col xs={12} sm={12}>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>Elf 6kg: </strong>
+                            </Label>
+                            <Input name="elf6kg" type="text" id="text-input"
+                                   placeholder="0"
+                                   onChange={this.handleChange}/>
+                          </FormGroup>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>Elf 12kg:</strong>
+                            </Label>
+                            <Input name="elf12kg" type="text" id="text-input"
+                                   placeholder="0"
+                                   onChange={this.handleChange}
+                                   />
+                          </FormGroup>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>Elf 39kg:</strong>
+                            </Label>
+                            <Input name="elf39kg" type="text" id="text-input"
+                                   placeholder="0"
+                                   onChange={this.handleChange}
+                                   />
+                          </FormGroup>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>B12:</strong>
+                            </Label>
+                            <Input name="b12" type="text" id="text-input"
+                                   placeholder="0"
+                                   onChange={this.handleChange}
+                                   />
+                          </FormGroup>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>B45:</strong>
+                            </Label>
+                            <Input name="b45" type="text" id="text-input"
+                                   placeholder="0"
+                                   onChange={this.handleChange}
+                                   />
+                          </FormGroup>
+                        </Col>
+                      </CardBody>
+                    </Card>
+                  </Collapse>
+                </FormGroup>
+                <FormGroup row>
+                  <Button color="info" onClick={() => this.toggleTV()}
+                          style={{marginBottom: '1rem'}}>Trả vỏ</Button>
+                  <Collapse isOpen={this.state.collapseTV}>
+                    <Card>
+                      <CardBody>
+                        <Col xs={12} sm={12}>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>Trả vỏ Elf 6kg: </strong>
+                            </Label>
+                            <Input name="payShellElf6kg" type="text" id="text-input"
+                                   placeholder="0"
+                                   onChange={this.handleChange}
+                                   />
+                          </FormGroup>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>Trả vỏ Elf 12kg:</strong>
+                            </Label>
+                            <Input name="payShellElf12kg" type="text" id="text-input"
+                                   placeholder="0"
+                                   onChange={this.handleChange}
+                                   />
+                          </FormGroup>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>Trả vỏ Elf 39kg:</strong>
+                            </Label>
+                            <Input name="payShellElf39kg" type="text" id="text-input"
+                                   placeholder="0"
+                                   onChange={this.handleChange}
+                                   />
+                          </FormGroup>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>Trả vỏ B12:</strong>
+                            </Label>
+                            <Input name="payShellB12" type="text" id="text-input"
+                                   placeholder="0"
+                                   onChange={this.handleChange}
+                                   />
+                          </FormGroup>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>Trả vỏ B45:</strong>
+                            </Label>
+                            <Input name="payShellB45" type="text" id="text-input"
+                                   placeholder="0"
+                                   onChange={this.handleChange}/>
+                          </FormGroup>
+                        </Col>
+                      </CardBody>
+                    </Card>
+                  </Collapse>
+                </FormGroup>
+                <FormGroup row>
+                  <Button color="info" onClick={() => this.toggleNKM()}
+                          style={{marginBottom: '1rem'}}>Nhập Khuyến Mãi</Button>
+                  <Collapse isOpen={this.state.collapseNKM}>
+                    <Card>
+                      <CardBody>
+                        <Col xs={12} sm={12}>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>Dầu: </strong>
+                            </Label>
+                            <Input name="oil" type="text" id="text-input"
+                                   placeholder="Số lượng dầu chai 500ml"
+                                   onChange={this.handleChange}
+                                   />
+                          </FormGroup>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>Đường:</strong>
+                            </Label>
+                            <Input name="sugar" type="text" id="text-input"
+                                   placeholder="số lượng đường (kg)"
+                                   onChange={this.handleChange}
+                                   />
+                          </FormGroup>
+                          <FormGroup row>
+                            <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                              <strong>Ly:</strong>
+                            </Label>
+                            <Input name="glass" type="text" id="text-input"
+                                   placeholder="Số lượng ly (cái)"
+                                   onChange={this.handleChange}
+                                   />
+                          </FormGroup>
+                        </Col>
+                      </CardBody>
+                    </Card>
+                  </Collapse>
+                </FormGroup>
+                <FormGroup row>
+                  <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                    <strong>Thành tiền:</strong>
+                  </Label>
+                  <Input name="totalMoney" type="text" id="text-input"
+                         placeholder="thành tiền"
+                         onChange={this.handleChange}
+                         readOnly/>
+                </FormGroup>
+                <FormGroup row>
+                  <Label htmlFor="text-input" style={{marginRight: '10px'}}>
+                    <strong>Trả tiền:</strong>
+                  </Label>
+                  <Input name="payment" type="text" id="text-input"
+                         placeholder="trả tiền"
+                         onChange={this.handleChange}
+                         required/>
+                </FormGroup>
+              </Col>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="success"
+                      onClick={this.toggleModal}>Xác nhận thêm</Button>
+              <Button color="danger"
+                      onClick={this.toggleModal}>Đóng</Button>
+            </ModalFooter>
+          </Modal>
         </div>
     );
   }

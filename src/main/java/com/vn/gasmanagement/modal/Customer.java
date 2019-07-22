@@ -26,9 +26,6 @@ public class Customer implements java.io.Serializable {
   @Column(name = "CustomerPhone")
   private String customerPhone;
 
-  @Column(name = "CustomerEmail")
-  private String customerEmail;
-
   @Column(name = "CustomerAddress")
   private String customerAddress;
 
@@ -43,6 +40,8 @@ public class Customer implements java.io.Serializable {
 
   @Column(name = "TotalScore")
   private int totalScore;
+
+  private String note;
 
   public Long getId() {
     return id;
@@ -74,14 +73,6 @@ public class Customer implements java.io.Serializable {
 
   public void setCustomerPhone(String customerPhone) {
     this.customerPhone = customerPhone;
-  }
-
-  public String getCustomerEmail() {
-    return customerEmail;
-  }
-
-  public void setCustomerEmail(String customerEmail) {
-    this.customerEmail = customerEmail;
   }
 
   public String getCustomerAddress() {
@@ -118,5 +109,13 @@ public class Customer implements java.io.Serializable {
 
   public void setTotalScore(int totalScore) {
     this.totalScore = totalScore;
+  }
+
+  public String getNote() {
+    return note;
+  }
+
+  public void setNote(String note) {
+    this.note = note;
   }
 }

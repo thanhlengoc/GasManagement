@@ -1,122 +1,152 @@
 import React, {Component} from 'react';
 
-import {Table, Divider, Tag} from 'antd';
-import 'antd/dist/antd.css';
-
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    width: 100,
-    fixed: 'left',
-    filters: [
-      {
-        text: 'Joe',
-        value: 'Joe',
-      },
-      {
-        text: 'John',
-        value: 'John',
-      },
-    ],
-    onFilter: (value, record) => record.name.indexOf(value) === 0,
-  },
-  {
-    title: 'Other',
-    children: [
-      {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
-        width: 200,
-        sorter: (a, b) => a.age - b.age,
-      },
-      {
-        title: 'Address',
-        children: [
-          {
-            title: 'Street',
-            dataIndex: 'street',
-            key: 'street',
-            width: 200,
-          },
-          {
-            title: 'Block',
-            children: [
-              {
-                title: 'Building',
-                dataIndex: 'building',
-                key: 'building',
-                width: 100,
-              },
-              {
-                title: 'Door No.',
-                dataIndex: 'number',
-                key: 'number',
-                width: 100,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: 'Company',
-    children: [
-      {
-        title: 'Company Address',
-        dataIndex: 'companyAddress',
-        key: 'companyAddress',
-        width: 200,
-      },
-      {
-        title: 'Company Name',
-        dataIndex: 'companyName',
-        key: 'companyName',
-      },
-    ],
-  },
-  {
-    title: 'Gender',
-    dataIndex: 'gender',
-    key: 'gender',
-    width: 80,
-    // fixed: 'right',
-  },
-];
-
-const data = [];
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i,
-    name: 'John Brown',
-    age: i + 1,
-    street: 'Lake Park',
-    building: 'C',
-    number: 2035,
-    companyAddress: 'Lake Street 42',
-    companyName: 'SoftLake Co',
-    gender: 'M',
-  });
-}
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  FormGroup,
+  FormText,
+  Label,
+  Row
+} from "reactstrap";
+import moment from "moment";
+import {DateRangePicker} from "react-dates";
 
 class Invoice extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      startDate: null,
+      endDate: null,
+    }
   }
 
-  render() {
+  onDateChange = (from, to) => {
+    this.setState({
+      startDate: from,
+      endDate: to
+    });
+  };
+
+  createCustomClearButton = (onClick) => {
     return (
-        <Table
-            columns={columns}
-            dataSource={data}
-            bordered
-            size="middle"
-            scroll={{ x: '130%', y: 240 }}
-        />
+        <button className='btn btn-secondary' onClick={ onClick }>Clear</button>
+    );
+  };
+
+  render() {
+    let month = moment().format("DD/MM/YYYY");
+    let lastMonth = moment().startOf('month').format("DD/MM/YYYY");
+
+    const options = {
+      clearSearch: true,
+      clearSearchBtn: this.createCustomClearButton
+    };
+
+    const selectRow = {
+      mode: 'checkbox',
+      bgColor: 'rgb(238, 193, 213)'
+    };
+
+    const products = [];
+    for (let i=0; i<50; i++) {
+      products.push({
+        id: i,
+        date: '02/07/2019',
+        InvoiceAmount: '15',
+        InMoney: '30,000,000',
+        BallotAmount: '1',
+        OutMoney: '20,000,000',
+        income: '10,000,000',
+        deficit: '0'
+      })
+    }
+
+    return (
+        <div className="animated fadeIn parent-padding">
+          <Card>
+            <CardBody>
+              <Row className="row justify-content-center">
+                <Col xs={12} sm={12} style={{alignItems:'center'}}>
+                  <h3>Quản lý thu chi</h3>
+                </Col>
+                <hr/>
+                <Col xs={12} sm={12}>
+                  <FormGroup>
+                    <Label htmlFor="name">Thời gian</Label>
+                    <Col xs="auto" className="pl-0">
+                      <DateRangePicker
+                          startDate={this.state.startDate}
+                          endDate={this.state.endDate}
+
+                          startDateId="startDate"
+                          endDateId="endDate"
+
+                          startDatePlaceholderText={lastMonth}
+                          endDatePlaceholderText={month}
+
+                          displayFormat="DD/MM/YYYY"
+                          onDatesChange={
+                            ({startDate, endDate}) => this.onDateChange(
+                                startDate, endDate)
+                          }
+
+                          focusedInput={this.state.focusedInput}
+                          onFocusChange={
+                            focusedInput => this.setState(
+                                {focusedInput})
+                          }
+                          orientation={this.state.orientation}
+                          openDirection={this.state.openDirection}
+                          isOutsideRange={() => false}
+                          minimumNights={0}
+                      />
+                      <Button type="button" color="success"
+                              style={{
+                                maxWidth: "150px",
+                                maxHeight: '50px',
+                                marginLeft: '20px',
+                                position: 'relative',
+                                top: '-10px'
+                              }}
+                      >
+                        <i className="fa fa-search"></i> Tìm kiếm
+                      </Button>
+                    </Col>
+                    <FormText className="help-block">Tìm kiếm theo
+                      tháng.</FormText>
+                  </FormGroup>
+                </Col>
+                <Col xs={12} sm={12}>
+                  <BootstrapTable
+                      data={ products }
+                      className="expand-table"
+                      options={options}
+                      headerStyle={{backgroundColor:'#78c3f1'}}
+                      selectRow={ selectRow }
+                      pagination striped hover condensed
+                      bodyStyle={{overflow: 'overlay'}}
+                      search exportCSV>
+                    <TableHeaderColumn row='0' rowSpan='2' width='50' dataField='id' isKey>TT</TableHeaderColumn>
+                    <TableHeaderColumn row='0' rowSpan='2' width='150' dataField='date'>Ngày</TableHeaderColumn>
+                    <TableHeaderColumn row='0' colSpan='2' dataSort csvHeader='Thu' headerAlign='right'>Thu</TableHeaderColumn>
+                    <TableHeaderColumn row='1' dataField='InvoiceAmount' width='120' dataAlign='center'>Số hóa đơn</TableHeaderColumn>
+                    <TableHeaderColumn row='1' dataField='InMoney' width='150' dataSort>Số tiền</TableHeaderColumn>
+                    <TableHeaderColumn row='0' colSpan='2' csvHeader='Customer' filter={ { type: 'TextFilter', delay: 1000 } }>Chi</TableHeaderColumn>
+                    <TableHeaderColumn row='1' csvHeader='name' width='120' dataField='BallotAmount'>Số phiếu nhập</TableHeaderColumn>
+                    <TableHeaderColumn row='1' csvHeader='order' width='150' dataField='OutMoney' dataSort>Số tiền</TableHeaderColumn>
+                    <TableHeaderColumn row='0' rowSpan='2' width='150' dataField='income'>Tiền lời</TableHeaderColumn>
+                    <TableHeaderColumn row='0' rowSpan='2' width='150' dataField='deficit'>Tiền lỗ</TableHeaderColumn>
+                  </BootstrapTable>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </div>
     );
   }
 }

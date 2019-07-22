@@ -20,7 +20,7 @@ public class Gas implements java.io.Serializable {
   @Column(name = "Code")
   private String code;
 
-  @Column(name = "GasType")
+  @Column(name = "GasName")
   private String gasName;
 
   @Column(name = "Weight")
@@ -29,8 +29,12 @@ public class Gas implements java.io.Serializable {
   @Column(name = "color")
   private String color;
 
-  @Column(name = "unitPrice")
-  private Long unitPrice;
+  @Column(name = "unitPriceIn")
+  private Long unitPriceIn;
+
+  private Long unitPriceOut;
+
+  private String gasTypeName;
 
   public int getId() {
     return id;
@@ -56,15 +60,21 @@ public class Gas implements java.io.Serializable {
     return weight;
   }
 
-  public void setWeight(Float weight) {
-    this.weight = weight;
-  }
+  public void setWeight(Float weight) { this.weight = weight; }
 
   public String getColor() { return color; }
 
   public void setColor(String color) { this.color = color; }
 
-  public Long getUnitPrice() { return unitPrice; }
+  public Long getUnitPriceIn() { return unitPriceIn; }
 
-  public void setUnitPrice(Long unitPrice) { this.unitPrice = unitPrice; }
+  public void setUnitPriceIn(Long unitPriceIn) { this.unitPriceIn = unitPriceIn; }
+
+  public Long getUnitPriceOut() { return unitPriceOut; }
+
+  public void setUnitPriceOut(Long unitPriceOut) { this.unitPriceOut = unitPriceOut; }
+
+  public String getGasTypeName() { return gasTypeName; }
+
+  public void setGasTypeName(String gasTypeName) { this.gasTypeName = gasTypeName; }
 }

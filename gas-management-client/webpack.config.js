@@ -26,13 +26,14 @@ module.exports = (env = {}) => {
     devtool: env.prod ? 'source-map' : 'cheap-module-eval-source-map',
     devServer: {
       contentBase: BUILD_DIR,
-      //   port: 9001,
+      port: 8081,
       compress: true,
       hot: true,
       open: true,
-      // proxy: {
-      //   "*": "http://localhost:8082"
-      // }
+      historyApiFallback: true,
+      proxy: {
+        "*": "http://[::1]:8082"
+      }
     },
     module: {
       rules: [
@@ -43,7 +44,7 @@ module.exports = (env = {}) => {
             loader: 'babel-loader',
             options: {
               cacheDirectory: true,
-              presets: ['react', 'env']
+              presets: ['es2015', 'react', 'env', 'stage-0']
             }
           }
         },

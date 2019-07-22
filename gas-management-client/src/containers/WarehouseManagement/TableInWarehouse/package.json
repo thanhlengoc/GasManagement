@@ -1,0 +1,6 @@
+{
+  "name": "TableInWarehouse",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./TableInWarehouse.js"
+}

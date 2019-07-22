@@ -2,6 +2,7 @@ package com.vn.gasmanagement.modal;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,8 +20,10 @@ public class ImportCoupon implements java.io.Serializable {
 
   private int idPayShell;
 
+  private int idDebt;
+
   @Column(name = "dateAdded")
-  private String dateAdded;
+  private Date dateAdded;
 
   @Column(name = "personAdded")
   private String personAdded;
@@ -30,6 +33,8 @@ public class ImportCoupon implements java.io.Serializable {
 
   @Column(name = "totalMoney")
   private Long totalMoney;
+
+  private Long payment;
 
   private String other;
 
@@ -51,13 +56,13 @@ public class ImportCoupon implements java.io.Serializable {
     this.idPayShell = idPayShell;
   }
 
-  public String getDateAdded() {
-    return dateAdded;
-  }
+  public int getIdDebt() { return idDebt; }
 
-  public void setDateAdded(String dateAdded) {
-    this.dateAdded = dateAdded;
-  }
+  public void setIdDebt(int idDebt) { this.idDebt = idDebt; }
+
+  public Date getDateAdded() { return dateAdded; }
+
+  public void setDateAdded(Date dateAdded) { this.dateAdded = dateAdded; }
 
   public String getPersonAdded() {
     return personAdded;
@@ -82,6 +87,10 @@ public class ImportCoupon implements java.io.Serializable {
   public void setTotalMoney(Long totalMoney) {
     this.totalMoney = totalMoney;
   }
+
+  public Long getPayment() { return payment; }
+
+  public void setPayment(Long payment) { this.payment = payment; }
 
   public String getOther() {
     return other;

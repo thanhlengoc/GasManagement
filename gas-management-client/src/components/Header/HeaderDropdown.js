@@ -87,17 +87,9 @@ class HeaderDropdown extends Component {
         <DropdownMenu right>
           <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
           <DropdownItem><i className="fa fa-bell-o"></i> Updates<Badge color="info">42</Badge></DropdownItem>
-          <DropdownItem><i className="fa fa-envelope-o"></i> Messages<Badge color="success">42</Badge></DropdownItem>
-          <DropdownItem><i className="fa fa-tasks"></i> Tasks<Badge color="danger">42</Badge></DropdownItem>
-          <DropdownItem><i className="fa fa-comments"></i> Comments<Badge color="warning">42</Badge></DropdownItem>
-          <DropdownItem header tag="div" className="text-center"><strong>Settings</strong></DropdownItem>
           <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
-          <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
-          <DropdownItem><i className="fa fa-usd"></i> Payments<Badge color="secondary">42</Badge></DropdownItem>
-          <DropdownItem><i className="fa fa-file"></i> Projects<Badge color="primary">42</Badge></DropdownItem>
-          <DropdownItem divider/>
           <DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>
-          <DropdownItem><i className="fa fa-lock"></i> Logout</DropdownItem>
+          <DropdownItem><a href={"/logout"}><i className="fa fa-lock"></i> Logout</a></DropdownItem>
         </DropdownMenu>
       </Dropdown>
     );
@@ -119,11 +111,6 @@ class HeaderDropdown extends Component {
             <div className="small mb-1">ReactJS Version <span className="float-right"><strong>25%</strong></span>
             </div>
             <Progress className="progress-xs" color="danger" value={25}/>
-          </DropdownItem>
-          <DropdownItem>
-            <div className="small mb-1">VueJS Version <span className="float-right"><strong>50%</strong></span>
-            </div>
-            <Progress className="progress-xs" color="warning" value={50}/>
           </DropdownItem>
           <DropdownItem>
             <div className="small mb-1">Add new layouts <span className="float-right"><strong>75%</strong></span>
@@ -170,23 +157,6 @@ class HeaderDropdown extends Component {
             <div className="message">
               <div className="py-3 mr-3 float-left">
                 <div className="avatar">
-                  <img src={'img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
-                  <Badge className="avatar-status" color="warning"></Badge>
-                </div>
-              </div>
-              <div>
-                <small className="text-muted">Jane Doe</small>
-                <small className="text-muted float-right mt-1">5 minutes ago</small>
-              </div>
-              <div className="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
-              <div className="small text-muted text-truncate">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
-              </div>
-            </div>
-          </DropdownItem>
-          <DropdownItem href="#">
-            <div className="message">
-              <div className="py-3 mr-3 float-left">
-                <div className="avatar">
                   <img src={'img/avatars/5.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
                   <Badge className="avatar-status" color="danger"></Badge>
                 </div>
@@ -194,23 +164,6 @@ class HeaderDropdown extends Component {
               <div>
                 <small className="text-muted">Janet Doe</small>
                 <small className="text-muted float-right mt-1">1:52 PM</small>
-              </div>
-              <div className="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
-              <div className="small text-muted text-truncate">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...
-              </div>
-            </div>
-          </DropdownItem>
-          <DropdownItem href="#">
-            <div className="message">
-              <div className="py-3 mr-3 float-left">
-                <div className="avatar">
-                  <img src={'img/avatars/4.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
-                  <Badge className="avatar-status" color="info"></Badge>
-                </div>
-              </div>
-              <div>
-                <small className="text-muted">Joe Doe</small>
-                <small className="text-muted float-right mt-1">4:03 AM</small>
               </div>
               <div className="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
               <div className="small text-muted text-truncate">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...

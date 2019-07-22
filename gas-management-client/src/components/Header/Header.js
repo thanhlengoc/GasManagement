@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {
+  Button,
   Nav,
   NavbarBrand,
   NavbarToggler,
@@ -8,6 +8,8 @@ import {
   NavLink,
 } from 'reactstrap';
 import HeaderDropdown from './HeaderDropdown';
+import {handleLogout} from "../../services/AuthService";
+import {toast} from "react-toastify";
 
 class Header extends Component {
 
@@ -35,7 +37,18 @@ class Header extends Component {
     document.body.classList.toggle('aside-menu-hidden');
   }
 
+  handleLogout = () => {
+    handleLogout().then(res => {
+      console.log(res);
+      toast.success("Đăng xuất thành công.")
+    }).catch(err => {
+      console.log(err);
+      toast.error("Đăng xuất không thành công.")
+    })
+  };
+
   render() {
+    const fullName = this.props.fullName;
     return (
       <header className="app-header navbar">
         <NavbarToggler className="d-lg-none" onClick={this.mobileSidebarToggle}>
@@ -47,27 +60,25 @@ class Header extends Component {
         </NavbarToggler>
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
-            <NavLink href="#">Dashboard</NavLink>
-          </NavItem>
-          <NavItem className="px-3">
-            <NavLink href="#">Users</NavLink>
-          </NavItem>
-          <NavItem className="px-3">
-            <NavLink href="#">Settings</NavLink>
+            <NavLink href="#">
+              <strong style={{color:'#23282c', fontSize:'16'}}>GAS HƯNG LỢI HƯNG</strong>
+            </NavLink>
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
-          <HeaderDropdown notif/>
-          <HeaderDropdown tasks/>
-          <NavItem className="d-md-down-none">
-            <NavLink href="#"><i className="icon-location-pin"></i></NavLink>
-          </NavItem>
           <HeaderDropdown accnt/>
-          <NavLink href="#" style={{marginRight:'40px'}}>Tên đăng nhập</NavLink>
+          <NavLink href="#" style={{marginRight:'10px', color:'black'}}>
+            {fullName ?
+                <strong>{fullName}</strong> :
+                'Tên đăng nhập'}
+          </NavLink>
+          <a className="btn btn-success" href="/logout"
+             onClick={()=>this.handleLogout()}
+                  style={{marginRight:'40px', color:'black', lineHeight:'0', border:'1px solid'}}
+          >
+            <i className="fa fa-sign-out"></i> Logout
+          </a>
         </Nav>
-        {/* <NavbarToggler className="d-md-down-none" onClick={this.asideToggle}>
-          <span className="navbar-toggler-icon"></span>
-        </NavbarToggler> */}
       </header>
     );
   }

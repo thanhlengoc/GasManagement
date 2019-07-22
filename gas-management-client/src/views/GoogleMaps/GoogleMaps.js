@@ -1,42 +1,18 @@
 import React, {Component} from 'react';
-import {Card, CardHeader, CardBody, NavLink} from 'reactstrap';
+import {Card, NavLink} from 'reactstrap';
 import {withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
 
-const defaultZoom = 11;
+const defaultZoom = 15;
 const defaultCenter = {lat: 12.23893, lng: 109.1906241};
 const locations = [
   {
-    lat: 37.431489,
-    lng: -122.163719,
+    lat: 12.2406224,
+    lng: 109.1956035,
     label: 'S',
     draggable: false,
-    title: 'Stanford',
-    www: 'https://www.stanford.edu/'
+    title: 'Tháp Trầm Hương Nha Trang',
+    www: 'https://www.vntrip.vn/cam-nang/thap-tram-huong-diem-den-thu-vi-trong-tour-du-lich-nha-trang-1043'
   },
-  {
-    lat: 37.394694,
-    lng: -122.150333,
-    label: 'T',
-    draggable: false,
-    title: 'Tesla',
-    www: 'https://www.tesla.com/'
-  },
-  {
-    lat: 37.331681,
-    lng: -122.030100,
-    label: 'A',
-    draggable: false,
-    title: 'Apple',
-    www: 'https://www.apple.com/'
-  },
-  {
-    lat: 37.484722,
-    lng: -122.148333,
-    label: 'F',
-    draggable: false,
-    title: 'Facebook',
-    www: 'https://www.facebook.com/'
-  }
 ];
 
 class MarkerList extends Component {
@@ -104,18 +80,13 @@ class ReactGoogleMaps extends Component {
     return (
     <div className="animated fadeIn">
       <Card>
-        <CardHeader>
-          <i className="icon-map"></i> Google Maps
-        </CardHeader>
-        <CardBody>
-          <GoogleMapsComponent
-            key="map"
-            googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyASyYRBZmULmrmw_P9kgr7_266OhFNinPA"
-            loadingElement={<div style={{height: `100%`}}/>}
-            containerElement={<div style={{height: `600px`}}/>}
-            mapElement={<div style={{height: `100%`}}/>}
-          />
-        </CardBody>
+        <GoogleMapsComponent
+          key="map"
+          googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyASyYRBZmULmrmw_P9kgr7_266OhFNinPA"
+          loadingElement={<div style={{height: `100%`}}/>}
+          containerElement={<div style={{height: `600px`}}/>}
+          mapElement={<div style={{height: `100%`}}/>}
+        />
       </Card>
     </div>
     )

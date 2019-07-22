@@ -2,19 +2,43 @@ package com.vn.gasmanagement.rest;
 
 import com.vn.gasmanagement.auth.CurrentUser;
 import com.vn.gasmanagement.auth.UserPrincipal;
-import com.vn.gasmanagement.payload.UserProfile;
+import com.vn.gasmanagement.payload.request.NewUserRequest;
+import com.vn.gasmanagement.service.impl.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/auth")
 public class UserController {
 
+  @Autowired
+  UserServiceImpl userService;
+
   @GetMapping(value = "/current-user")
-  public UserProfile getCurrentUser(@CurrentUser UserPrincipal user) {
-    return new UserProfile(user.getUserId(), user.getFullName(),
-        user.getCmnd(), user.getPhoneNumber(), user.getAddress(), user.getStartDateWork(),
-        user.getGrantedAuthorities());
+  public ResponseEntity<?> getCurrentUser(@CurrentUser UserPrincipal user) {
+    return userService.getCurrentUser(user);
   }
+
+  @GetMapping(value = "/get-role-of-current-user")
+  public ResponseEntity<?> getRoleOfCurrentUser(@CurrentUser UserPrincipal user) {
+    return userService.getRoleOfCurrentUser(user);
+  }
+
+  @GetMapping(value = "/get-list-user")
+  public ResponseEntity<?> getListUser() {
+    return new ResponseEntity<>(userService.getListUser(), HttpStatus.OK);
+  }
+
+  @PostMapping(value = "/new-user")
+  public ResponseEntity<?> createNewUser(NewUserRequest request) {
+    return new ResponseEntity<>(userService.createNewUser(request), HttpStatus.OK);
+  }
+
 }

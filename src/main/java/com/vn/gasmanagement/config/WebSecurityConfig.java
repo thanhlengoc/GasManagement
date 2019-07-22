@@ -1,6 +1,7 @@
 package com.vn.gasmanagement.config;
 
 import com.vn.gasmanagement.auth.CustomUserDetailService;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,29 +33,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+
+    http.cors();
+
     http
-        .cors().and().csrf().disable()
         .authorizeRequests()
-        .antMatchers("/login", "/css/**", "/vendors/**", "/js/**").permitAll()
+        .antMatchers("/login",
+            "/css/**",
+            "/img/**",
+            "/vendors/**",
+            "/js/**").permitAll()
         .antMatchers("/", "/user/**").hasAnyRole("MANAGER", "WORKER")
         .anyRequest()
         .authenticated()
-        .and()
+        .and().csrf().disable()
         .formLogin()
         .loginPage("/login")
         .usernameParameter("username")
         .passwordParameter("password")
-        .defaultSuccessUrl("/",true)
+        .defaultSuccessUrl("/index",true)
         .failureUrl("/login?error=true")
         .and()
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher( "/logout"))
-        .logoutSuccessUrl("/")
+        .logoutSuccessUrl("/login")
         .invalidateHttpSession(false)
         .deleteCookies("JSESSIONID")
         .and()
         .exceptionHandling()
-        .accessDeniedPage("/access-denied")
+          .accessDeniedPage("/403")
         .and()
         .headers().frameOptions().sameOrigin();
   }
@@ -65,7 +72,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
     CorsConfiguration corsConfiguration = new CorsConfiguration();
-    corsConfiguration.addAllowedOrigin("http://localhost:8080");
+    corsConfiguration.addAllowedOrigin("http://localhost:8081");
+    corsConfiguration.setAllowedMethods(Arrays.asList("GET", "HEAD", "POST", "PUT", "OPTIONS"));
     corsConfiguration.addAllowedHeader("*");
     corsConfiguration.addAllowedMethod("*");
     corsConfiguration.setAllowCredentials(true);

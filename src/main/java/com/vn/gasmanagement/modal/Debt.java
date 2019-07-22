@@ -17,6 +17,8 @@ public class Debt implements java.io.Serializable {
   @Column(name = "Id", unique = true, nullable = false)
   private int id;
 
+  private String date;
+
   @Column(name = "debtMoney")
   private Long debtMoney;
 
@@ -32,6 +34,10 @@ public class Debt implements java.io.Serializable {
   public void setId(int id) {
     this.id = id;
   }
+
+  public String getDate() { return date; }
+
+  public void setDate(String date) { this.date = date; }
 
   public Long getDebtMoney() {
     return debtMoney;
