@@ -9,3 +9,7 @@ export function createNewUser(request) {
 export function getListUser() {
   return httpGet(BASE_URL + '/get-list-user');
 }
+
+export function updateUserInfo(request) {
+  return httpPost(BASE_URL + "/update-info", request);
+}

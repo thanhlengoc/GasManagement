@@ -3,6 +3,7 @@ package com.vn.gasmanagement.service;
 import com.vn.gasmanagement.auth.CurrentUser;
 import com.vn.gasmanagement.auth.UserPrincipal;
 import com.vn.gasmanagement.payload.request.NewUserRequest;
+import com.vn.gasmanagement.payload.request.UpdateUserRequest;
 import com.vn.gasmanagement.payload.response.BaseResponse;
 import org.springframework.http.ResponseEntity;
 
@@ -11,4 +12,5 @@ public interface UserService {
   ResponseEntity<?> getRoleOfCurrentUser(@CurrentUser UserPrincipal user);
   BaseResponse getListUser();
   BaseResponse createNewUser(NewUserRequest request);
+  BaseResponse updateUser(UpdateUserRequest request);
 }

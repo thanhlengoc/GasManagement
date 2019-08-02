@@ -15,6 +15,7 @@ import com.vn.gasmanagement.repository.BillDetailRepository;
 import com.vn.gasmanagement.repository.BillRepository;
 import com.vn.gasmanagement.repository.GasRepository;
 import com.vn.gasmanagement.service.InvoiceService;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -133,6 +134,7 @@ public class InvoiceServiceImpl implements InvoiceService {
       List<Bill> billList = billRepository.findAllByCustomerPurchase(customerId);
       for (Bill bill : billList) {
         InvoiceResponse response = new InvoiceResponse();
+        response.setInvoiceCode(bill.getId());
         response.setDateOut(bill.getInvoiceDate());
         response.setCustomerPurchase(bill.getCustomerPurchase());
         response.setUserSale(bill.getUserSale());
@@ -166,7 +168,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceResponseList.add(response);
       }
 
-
       return new BaseResponse(0,
           "Lấy danh sách hóa đơn của khách hàng thành công.", invoiceResponseList);
     }
@@ -180,11 +181,70 @@ public class InvoiceServiceImpl implements InvoiceService {
   public BaseResponse getListInvoiceDate(DatePartition datePartition) {
     try {
 
-      return new BaseResponse(0, "Lấy danh sách hóa đơn thành công.", null);
+      return new BaseResponse(1, "Lấy danh sách hóa đơn thành công.", null);
     }
     catch (Exception ex) {
       logger.error(ex.getMessage(), ex);
       return new BaseResponse(0, "Lấy danh sách hóa đơn thất bại.", null);
+    }
+  }
+
+  @Override
+  public BaseResponse getAllInvoice() throws SQLException {
+    try {
+      List<InvoiceResponse> responseList = new ArrayList<>();
+      List<Bill> billList = billRepository.findAll();
+      for (Bill bill : billList) {
+        List<BillDetail> billDetailList = billDetailRepository.findAllByBillId(bill.getId());
+        InvoiceResponse invoiceResponse = new InvoiceResponse();
+        invoiceResponse.setInvoiceCode(bill.getId());
+        invoiceResponse.setDateOut(bill.getInvoiceDate());
+        invoiceResponse.setUserSale(bill.getUserSale());
+        invoiceResponse.setCustomerPurchase(bill.getCustomerPurchase());
+        invoiceResponse.setNote(bill.getNote());
+        for (BillDetail billDetail : billDetailList) {
+          int gasId = billDetail.getGasId();
+          switch (gasId) {
+            case 1:
+              invoiceResponse.setElf6kg(billDetail.getAmount());
+              break;
+            case 2:
+              invoiceResponse.setElf12kg(billDetail.getAmount());
+              break;
+            case 3:
+              invoiceResponse.setElf39kg(billDetail.getAmount());
+              break;
+            case 4:
+              invoiceResponse.setB12(billDetail.getAmount());
+              break;
+            case 5:
+              invoiceResponse.setB45(billDetail.getAmount());
+              break;
+              default:
+                break;
+          }
+
+        }
+
+        responseList.add(invoiceResponse);
+      }
+      return new BaseResponse(1,"Lấy tất cả hóa đơn thành công.", responseList);
+    }
+    catch (Exception ex) {
+      logger.error(ex.getMessage(), ex);
+      return new BaseResponse(0,"Lấy tất cả hóa đơn thất bại.", null);
+    }
+  }
+
+  @Override
+  public BaseResponse handleDataInOut() throws SQLException {
+    try {
+
+      return new BaseResponse(0,"Lấy thông tin thu chi thành công từ server.", null);
+    }
+    catch (Exception ex) {
+      logger.error(ex.getMessage(), ex);
+      return new BaseResponse(0,"Lấy thông tin thu chi thất bại từ server.", null);
     }
   }
 }

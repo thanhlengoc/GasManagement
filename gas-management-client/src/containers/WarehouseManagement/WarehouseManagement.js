@@ -23,6 +23,11 @@ import {getAllGasType, saveGasType} from "../../api/gasType";
 import TableExistEnd from "./TableExistEnd";
 import TableOutWarehouse from "./TableOutWarehouse";
 import TableInWarehouse from "./TableInWarehouse";
+import {createNewBallot, getListData} from "../../api/warehouseApi";
+import {toast} from "react-toastify";
+
+let month = moment().format("DD/MM/YYYY");
+let lastMonth = moment().startOf('month').format("DD/MM/YYYY");
 
 class WarehouseManagement extends Component {
   constructor(props) {
@@ -33,6 +38,9 @@ class WarehouseManagement extends Component {
       endDate: null,
       modal: false,
       dateInWarehouse: null,
+
+      tableInWarehouse: [],
+      newBallot: {},
 
       listAllGasType: null,
       code: '',
@@ -129,9 +137,48 @@ class WarehouseManagement extends Component {
     saveGasType(request)
   };
 
+  handleCreateNewBallot = () => {
+    const request = {
+
+    };
+
+    createNewBallot(request).then(res => {
+      if(parseInt(res.data.returnCode) === 1){
+        this.setState({
+          newBallot: res.data.result
+        });
+        toast.success(res.data.returnMessage);
+      }
+      else {
+        toast.error(res.data.returnMessage);
+      }
+    }).catch(err => {
+      console.log(err);
+      toast.error("Không có phản hồi từ server.")
+    })
+  };
+
+  handleGetTableInWarehouse = () => {
+    getListData().then(res => {
+      if(parseInt(res.data.returnCode) === 1) {
+        this.setState({
+          tableInWarehouse: res.data.result
+        })
+      }
+      else {
+        toast.error(res.data.returnMessage);
+      }
+    }).catch(err => {
+      console.log(err);
+      toast.error("Không có phản hồi từ server.")
+    })
+  };
+
+  handleSearchData = () => {
+
+  };
+
   render() {
-    let month = moment().format("DD/MM/YYYY");
-    let lastMonth = moment().startOf('month').format("DD/MM/YYYY");
     const {listAllGasType} = this.state;
 
     return (

@@ -15,6 +15,9 @@ import {
 import moment from "moment";
 import {DateRangePicker} from "react-dates";
 
+let currentDate = moment().format("DD/MM/YYYY");
+let startOffMonth = moment().startOf('month').format("DD/MM/YYYY");
+
 class Invoice extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +35,22 @@ class Invoice extends Component {
     });
   };
 
+  componentDidMount() {
+
+  }
+
+  handleSearchInOut = () => {
+    const {startDate, endDate} = this.state;
+
+    const request = {
+      dateFrom: startDate ? startDate : startOffMonth,
+      dateTo: endDate ?  endDate : currentDate,
+    }
+
+    //Todo: call Api
+
+  };
+
   createCustomClearButton = (onClick) => {
     return (
         <button className='btn btn-secondary' onClick={ onClick }>Clear</button>
@@ -39,8 +58,6 @@ class Invoice extends Component {
   };
 
   render() {
-    let month = moment().format("DD/MM/YYYY");
-    let lastMonth = moment().startOf('month').format("DD/MM/YYYY");
 
     const options = {
       clearSearch: true,
@@ -71,10 +88,9 @@ class Invoice extends Component {
           <Card>
             <CardBody>
               <Row className="row justify-content-center">
-                <Col xs={12} sm={12} style={{alignItems:'center'}}>
-                  <h3>Quản lý thu chi</h3>
-                </Col>
-                <hr/>
+                <h3><i className="fa fa-plus"/> Quản lý thu chi</h3>
+              </Row>
+              <Row>
                 <Col xs={12} sm={12}>
                   <FormGroup>
                     <Label htmlFor="name">Thời gian</Label>
@@ -86,8 +102,8 @@ class Invoice extends Component {
                           startDateId="startDate"
                           endDateId="endDate"
 
-                          startDatePlaceholderText={lastMonth}
-                          endDatePlaceholderText={month}
+                          startDatePlaceholderText={startOffMonth}
+                          endDatePlaceholderText={currentDate}
 
                           displayFormat="DD/MM/YYYY"
                           onDatesChange={
@@ -135,10 +151,10 @@ class Invoice extends Component {
                     <TableHeaderColumn row='0' rowSpan='2' width='150' dataField='date'>Ngày</TableHeaderColumn>
                     <TableHeaderColumn row='0' colSpan='2' dataSort csvHeader='Thu' headerAlign='right'>Thu</TableHeaderColumn>
                     <TableHeaderColumn row='1' dataField='InvoiceAmount' width='120' dataAlign='center'>Số hóa đơn</TableHeaderColumn>
-                    <TableHeaderColumn row='1' dataField='InMoney' width='150' dataSort>Số tiền</TableHeaderColumn>
+                    <TableHeaderColumn row='1' dataField='InMoney' width='150' dataSort>Số tiền bán</TableHeaderColumn>
                     <TableHeaderColumn row='0' colSpan='2' csvHeader='Customer' filter={ { type: 'TextFilter', delay: 1000 } }>Chi</TableHeaderColumn>
                     <TableHeaderColumn row='1' csvHeader='name' width='120' dataField='BallotAmount'>Số phiếu nhập</TableHeaderColumn>
-                    <TableHeaderColumn row='1' csvHeader='order' width='150' dataField='OutMoney' dataSort>Số tiền</TableHeaderColumn>
+                    <TableHeaderColumn row='1' csvHeader='order' width='150' dataField='OutMoney' dataSort>Số tiền nhập</TableHeaderColumn>
                     <TableHeaderColumn row='0' rowSpan='2' width='150' dataField='income'>Tiền lời</TableHeaderColumn>
                     <TableHeaderColumn row='0' rowSpan='2' width='150' dataField='deficit'>Tiền lỗ</TableHeaderColumn>
                   </BootstrapTable>

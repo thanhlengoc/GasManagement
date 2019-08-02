@@ -29,7 +29,7 @@ module.exports = (env = {}) => {
       port: 8081,
       compress: true,
       hot: true,
-      open: true,
+      open: false,
       historyApiFallback: true,
       proxy: {
         "*": "http://[::1]:8082"

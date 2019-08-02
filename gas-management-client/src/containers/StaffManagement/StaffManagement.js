@@ -18,14 +18,16 @@ import {
   FormGroup,
   Label,
   Modal,
-  ModalHeader, ModalBody, ModalFooter,
+  ModalHeader, ModalFooter, CardFooter,
 } from 'reactstrap';
 import classnames from 'classnames';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import {createNewUser, getListUser} from "../../api/userApi";
+import {createNewUser, getListUser, updateUserInfo} from "../../api/userApi";
 import {toast} from "react-toastify";
+
+let currentDate = moment().format('DD/MM/YYYY');
 
 class StaffManagement extends Component {
   constructor(props) {
@@ -35,8 +37,6 @@ class StaffManagement extends Component {
       listUsers: [],
       nameToSearch: '',
       searchResult: null,
-      activeTab: '1',
-      userChooses: {},
 
       username: '',
       password: '',
@@ -46,16 +46,23 @@ class StaffManagement extends Component {
       cmnd: '',
       startDateWork: null,
       endDateWork: null,
-      roleOption: 1,
+      roleOption: 2,
       note: '',
       userNew: {},
+
+      phoneUpdate: '',
+      nameUpdate: '',
+      addressUpdate: '',
+      cmndUpdate: '',
+      startDateUpdate: null,
+      endDateUpdate: null,
+      noteUpdate: '',
 
       modalUpdate: false,
       activeTabModal: '1',
     };
 
     this.toggleCollapse = this.toggleCollapse.bind(this);
-    this.toggleTab = this.toggleTab.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.searchUser = this.searchUser.bind(this);
     this.renderSearchResult = this.renderSearchResult.bind(this);
@@ -68,19 +75,15 @@ class StaffManagement extends Component {
     this.setState({collapse: !this.state.collapse});
   }
 
-  toggleTab(tab) {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab
-      });
-    }
-  }
-
   toggleModal = (item) => {
     if(item) {
       this.setState(prevState => ({
         modalUpdate: !prevState.modalUpdate,
-        userChooses: item
+        phoneUpdate: item.phoneNumber,
+        nameUpdate: item.fullName,
+        addressUpdate: item.address,
+        cmndUpdate: item.cmnd,
+        noteUpdate: item.note,
       }));
     }
     else {
@@ -103,16 +106,20 @@ class StaffManagement extends Component {
   }
 
   handleChangeStartDate(date) {
-    this.setState({
-      startDateWork: date
-    });
+    this.setState({startDateWork: date});
   }
 
   handleChangeEndDate(date) {
-    this.setState({
-      endDateWork: date
-    });
+    this.setState({endDateWork: date});
   }
+
+  handleChangeStartDateUpdate = (date) => {
+    this.setState({startDateUpdate: date});
+  };
+
+  handleChangeEndDateUpdate = (date) => {
+    this.setState({endDateUpdate: date});
+  };
 
   componentDidMount() {
     getListUser().then(res => {
@@ -126,24 +133,32 @@ class StaffManagement extends Component {
   }
 
   handleAddNewUser = () => {
-    const {username, password, fullName, phone, address, cmnd, startDateWork, note} = this.state;
+    const {username, password, roleOption, fullName, phone, address, cmnd, startDateWork, note} = this.state;
     const request = {
       username: username ? username : '',
       password: password ? username : '',
+      role: roleOption ? roleOption : 2,
       fullName: fullName ? fullName : '',
       phoneNumber : phone ? phone : '',
       address: address ? address : '',
       cmnd: cmnd ? cmnd : '',
-      startDateWork: startDateWork ? startDateWork : '',
+      startDateWork: startDateWork ? startDateWork : currentDate,
       note: note ? note : ''
     };
+    console.log("request: "+JSON.stringify(request));
     createNewUser(request).then(res => {
-      this.setState({
-        userNew: res.data.result
-      })
+      if(parseInt(res.data.returnCode) === 1)
+      {
+        this.setState({
+          userNew: res.data.result
+        })
+      }
+      else {
+        toast.error(res.data.returnMessage);
+      }
     }).catch(err => {
       console.log(err);
-      toast.error("Thêm nhân viên thành công.");
+      toast.error("Không có phản hồi từ server.");
     })
   };
 
@@ -159,6 +174,34 @@ class StaffManagement extends Component {
       searchResult: userFiltered
     })
   }
+
+  handleUpdateUserInfo = () => {
+    const {nameUpdate, phoneUpdate, addressUpdate, cmndUpdate,
+      startDateUpdate, endDateUpdate, noteUpdate} = this.state;
+    const {id} = this.state.userChooses;
+    const request = {
+      userId: id ? id : 0,
+      fullName: nameUpdate,
+      phoneNumber: phoneUpdate,
+      address: addressUpdate,
+      cmnd: cmndUpdate,
+      startDateWork:startDateUpdate,
+      endDateWork: endDateUpdate,
+      note: noteUpdate
+    };
+    console.log("request: "+JSON.stringify(request));
+    updateUserInfo(request).then(res => {
+      if(parseInt(res.data.returnCode) === 1) {
+        toast.success(res.data.returnMessage);
+      }
+      else {
+        toast.error(res.data.returnMessage);
+      }
+    }).catch(err => {
+      console.log(err);
+      toast.error("Không có phản hồi. Vui lòng thử lại.")
+    })
+  };
 
   renderSearchResult() {
     const {searchResult} = this.state;
@@ -181,7 +224,7 @@ class StaffManagement extends Component {
           <td>{item.cmnd}</td>
           <td>{item.startDateWork}</td>
           <td>{item.endDateWork}</td>
-          <td>{item.note}</td>
+          <td>{item.role}</td>
           <td>{item.note}</td>
         </tr>
     ))
@@ -192,9 +235,9 @@ class StaffManagement extends Component {
   };
 
   render() {
-    const {listUsers} = this.state;
-    const {fullName, phoneNumber, address, cmnd, startDateWork, note} = this.state.userChooses;
-    let currentDate = moment().format('DD/MM/YYYY');
+    const {listUsers, nameUpdate, phoneUpdate, addressUpdate, cmndUpdate,
+      startDateUpdate, endDateUpdate, noteUpdate} = this.state;
+
     return (
         <div className="animated fadeIn parent-padding">
           <Row>
@@ -267,7 +310,7 @@ class StaffManagement extends Component {
                                     <td>{item.cmnd}</td>
                                     <td>{item.startDateWork}</td>
                                     <td>{item.endDateWork}</td>
-                                    <td>{item.note}</td>
+                                    <td>{item.role}</td>
                                     <td>{item.note}</td>
                                   </tr>
                               )
@@ -286,121 +329,134 @@ class StaffManagement extends Component {
           <Row>
             <Col>
               <Card>
-                <CardHeader>
-                  <Nav pills>
-                    <NavItem>
-                      <NavLink className={classnames(
-                          {active: this.state.activeTab === '1'})}
-                               onClick={() => {
-                                 this.toggleTab('1');
-                               }}><strong><i className="fa fa-plus"/> Thêm nhân viên mới</strong>
-                      </NavLink>
-                    </NavItem>
-                  </Nav>
-                </CardHeader>
-                  <TabContent activeTab={this.state.activeTab}>
-                    <TabPane tabId="1">
-                      <form id="form-create-user">
-                        <Row>
-                          <Col xs="12" sm="6">
-                            <FormGroup>
-                              <Label htmlFor="text-input">Phân quyền</Label>
-                              <select
-                                  className="form-control"
-                                  onChange={(e) => this.setState(
-                                      {roleOption: e.target.value})}>
-                                <option value={1}>Nhân viên</option>
-                                <option value={2}>Quản lí</option>
-                              </select>
-                            </FormGroup>
+                  <form id="form-create-user">
+                    <Row className="row justify-content-center" style={{padding:'20px 0'}}>
+                      <h3><i className="fa fa-plus"/> Thêm nhân viên mới</h3>
+                    </Row>
+                    <Row className="row justify-content-center"
+                          style={{padding:'20px 0'}}>
+                      <Col xs="12" sm="5">
+                        <FormGroup>
+                          <Label htmlFor="text-input">Phân quyền</Label>
+                          <select
+                              className="form-control"
+                              onChange={(e) => this.setState(
+                                  {roleOption: e.target.value})}>
+                            <option value={2}>Nhân viên</option>
+                            <option value={1}>Quản lí</option>
+                          </select>
+                        </FormGroup>
+                        <FormGroup>
+                          <InputGroup>
+                            <div className="input-group-prepend">
+                              <span className="input-group-text"><i className="fa fa-user"></i></span>
+                            </div>
+                            <Input type="text" id="username" name="username"
+                                   placeholder="Username"
+                                   onChange={this.handleChange}/>
+                          </InputGroup>
+                        </FormGroup>
+                        <FormGroup>
+                          <InputGroup>
+                            <div className="input-group-prepend">
+                              <span className="input-group-text"><i className="fa fa-asterisk"></i></span>
+                            </div>
+                            <Input type="password" id="password" name="password"
+                                   onChange={this.handleChange}
+                                   placeholder="Password"/>
+                          </InputGroup>
+                        </FormGroup>
+                      </Col>
+                      <Col xs="12" sm="5">
+                        <FormGroup row>
+                          <Col xs="12" sm="3">
+                            <Label htmlFor="text-input">Họ và tên</Label>
                           </Col>
-                          <Col xs="12" sm="6">
-                            <FormGroup row>
-                              <Col xs="12" sm="3">
-                                <Label htmlFor="text-input">Họ và tên</Label>
-                              </Col>
-                              <Col xs="12" sm="9">
-                                <Input name="fullName" type="text" id="text-input"
-                                       placeholder="Họ tên nhân viên"
-                                       onChange={this.handleChange} required/>
-                              </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                              <Col xs="12" sm="3">
-                                <Label htmlFor="text-input">Số điện thoại</Label>
-                              </Col>
-                              <Col xs="12" sm="9">
-                                <Input name="phone" type="text" id="text-input"
-                                       placeholder="Số điện thoại"
-                                       onChange={this.handleChange} required/>
-                              </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                              <Col xs="12" sm="3">
-                                <Label htmlFor="text-input">Địa chỉ</Label>
-                              </Col>
-                              <Col xs="12" sm="9">
-                                <Input name="address" type="text" id="text-input"
-                                       placeholder="Địa chỉ"
-                                       onChange={this.handleChange}
-                                       required/>
-                              </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                              <Col xs="12" sm="3">
-                                <Label htmlFor="text-input">CMND</Label>
-                              </Col>
-                              <Col xs="12" sm="9">
-                                <Input name="cmnd" type="text" id="text-input"
-                                       placeholder="chứng minh nhân dân"
-                                       onChange={this.handleChange}
-                                />
-                              </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                              <Col xs="12" sm="3">
-                                <Label htmlFor="text-input">Ngày bắt đầu làm
-                                  việc</Label>
-                              </Col>
-                              <Col xs="12" sm="9">
-                                <DatePicker
-                                    className="form-control"
-                                    placeholderText={currentDate}
-                                    selected={this.state.startDateWork}
-                                    onChange={this.handleChangeStartDate}
-                                    dateFormat="DD/MM/YYYY"
-                                />
-                              </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                              <Col xs="12" sm="3">
-                                <Label htmlFor="text-input">Ghi chú</Label>
-                              </Col>
-                              <Col xs="12" sm="9">
-                                <Input name="note" type="text" id="text-input"
-                                       placeholder="Ghi chú tại đây"
-                                       onChange={this.handleChange}/>
-                              </Col>
-                            </FormGroup>
+                          <Col xs="12" sm="9">
+                            <Input name="fullName" type="text" id="fullName"
+                                   placeholder="Họ tên nhân viên"
+                                   onChange={this.handleChange} required/>
                           </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                          <Col xs="12" sm="3">
+                            <Label htmlFor="text-input">Số điện thoại</Label>
+                          </Col>
+                          <Col xs="12" sm="9">
+                            <Input name="phone" type="text" id="phone"
+                                   placeholder="Số điện thoại"
+                                   onChange={this.handleChange} required/>
+                          </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                          <Col xs="12" sm="3">
+                            <Label htmlFor="text-input">Địa chỉ</Label>
+                          </Col>
+                          <Col xs="12" sm="9">
+                            <Input name="address" type="text" id="address"
+                                   placeholder="Địa chỉ"
+                                   onChange={this.handleChange}
+                                   required/>
+                          </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                          <Col xs="12" sm="3">
+                            <Label htmlFor="text-input">CMND</Label>
+                          </Col>
+                          <Col xs="12" sm="9">
+                            <Input name="cmnd" type="text" id="cmnd"
+                                   placeholder="chứng minh nhân dân"
+                                   onChange={this.handleChange}
+                            />
+                          </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                          <Col xs="12" sm="3">
+                            <Label htmlFor="text-input">Ngày bắt đầu làm
+                              việc</Label>
+                          </Col>
+                          <Col xs="12" sm="9">
+                            <DatePicker
+                                className="form-control"
+                                placeholderText={currentDate}
+                                selected={this.state.startDateWork}
+                                onChange={this.handleChangeStartDate}
+                                dateFormat="DD/MM/YYYY"
+                            />
+                          </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                          <Col xs="12" sm="3">
+                            <Label htmlFor="text-input">Ghi chú</Label>
+                          </Col>
+                          <Col xs="12" sm="9">
+                            <Input name="note" type="text" id="note"
+                                   placeholder="Ghi chú tại đây"
+                                   onChange={this.handleChange}/>
+                          </Col>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <CardFooter>
+                      <Row className="row justify-content-center">
+                        <Col xs={12} sm={10}>
                           <Button type="submit" color="success"
-                                  onClick={()=>this.handleAddNewUser()}
-                                  style={{marginLeft:'20px'}}>
+                                  onClick={()=>this.handleAddNewUser()}>
                             <i className="fa fa-plus"/> Thêm</Button>
-                          <Button type="reset" color="danger" onClick={()=>this.handleResetForm()}>
+                          <Button type="reset" color="danger" className="pull-right"
+                                  onClick={()=>this.handleResetForm()}>
                             <i className="fa fa-ban"></i> Reset</Button>
-                        </Row>
-                      </form>
-                    </TabPane>
-                  </TabContent>
+                        </Col>
+                      </Row>
+                    </CardFooter>
+                  </form>
               </Card>
             </Col>
           </Row>
 
           <Modal isOpen={this.state.modalUpdate} toggle={()=>this.toggleModal()}
-                 className={'modal-lg modal-lg-custom' + this.props.className}
-                 style={{maxWidth:'90%'}}
-          >
+                 className={this.props.className}>
+            <form id="form-update-user">
             <ModalHeader toggle={()=>this.toggleModal()}>
               <Nav pills>
                 <NavItem>
@@ -415,15 +471,15 @@ class StaffManagement extends Component {
               <TabContent activeTab={this.state.activeTabModal}>
                 <TabPane tabId="1">
                   <Row>
-                    <Col xs="12" sm="6">
+                    <Col xs="12" sm="12">
                       <FormGroup row>
                         <Col xs="12" sm="3">
                           <Label htmlFor="text-input">Họ và tên</Label>
                         </Col>
                         <Col xs="12" sm="9">
-                          <Input name="fullName" type="text" id="text-input"
+                          <Input name="nameUpdate" type="text"
                                  placeholder="Họ tên nhân viên"
-                                 value={fullName ? fullName : ''}
+                                 value={nameUpdate ? nameUpdate : ''}
                                  onChange={this.handleChange}/>
                         </Col>
                       </FormGroup>
@@ -432,15 +488,10 @@ class StaffManagement extends Component {
                           <Label htmlFor="text-input">Số điện thoại</Label>
                         </Col>
                         <Col xs="12" sm="9" style={{display:'flex'}}>
-                          <Input name="phone" type="text" id="text-input"
+                          <Input name="phoneUpdate" type="text"
                                  placeholder="Số điện thoại nhân viên"
-                                 style={{width:'90%'}}
-                                 value={phoneNumber ? phoneNumber : ''}
-                                 onChange={this.handleChange}/>
-                          <Button type="submit" color="success"
-                                  style={{marginLeft:'10px'}}
-                          >
-                            <i className="fa fa-plus"/> Thêm</Button>
+                                 value={phoneUpdate ? phoneUpdate : ''}
+                                 onChange={(e)=>this.setState({phoneUpdate: e.target.value})}/>
                         </Col>
                       </FormGroup>
                       <FormGroup row>
@@ -448,11 +499,10 @@ class StaffManagement extends Component {
                           <Label htmlFor="text-input">Địa chỉ</Label>
                         </Col>
                         <Col xs="12" sm="9">
-                          <Input name="address" type="text" id="text-input"
+                          <Input name="addressUpdate" type="text"
                                  placeholder="Địa chỉ"
-                                 value={address ? address : ''}
-                                 onChange={this.handleChange}
-                          />
+                                 value={addressUpdate ? addressUpdate : ''}
+                                 onChange={this.handleChange}/>
                         </Col>
                       </FormGroup>
                       <FormGroup row>
@@ -460,24 +510,23 @@ class StaffManagement extends Component {
                           <Label htmlFor="text-input">CMND</Label>
                         </Col>
                         <Col xs="12" sm="9">
-                          <Input name="cmnd" type="text" id="text-input"
+                          <Input name="cmndUpdate" type="text"
                                  placeholder="chứng minh nhân dân"
-                                 value={cmnd ? cmnd : ''}
+                                 value={cmndUpdate ? cmndUpdate : ''}
                                  onChange={this.handleChange}
                           />
                         </Col>
                       </FormGroup>
                       <FormGroup row>
                         <Col xs="12" sm="3">
-                          <Label htmlFor="text-input">Ngày bắt đầu làm
-                            việc</Label>
+                          <Label htmlFor="text-input">Ngày kết thúc làm việc</Label>
                         </Col>
                         <Col xs="12" sm="9">
                           <DatePicker
                               className="form-control"
                               placeholderText={currentDate}
-                              selected={this.state.startDateWork}
-                              onChange={this.handleChangeStartDate}
+                              selected={endDateUpdate}
+                              onChange={()=>this.handleChangeEndDateUpdate()}
                               dateFormat="DD/MM/YYYY"
                           />
                         </Col>
@@ -487,8 +536,8 @@ class StaffManagement extends Component {
                           <Label htmlFor="text-input">Ghi chú</Label>
                         </Col>
                         <Col xs="12" sm="9">
-                          <Input name="note" type="text" id="text-input"
-                                 value={note ? note : ''}
+                          <Input name="noteUpdate" type="text"
+                                 value={noteUpdate ? noteUpdate : ''}
                                  placeholder="Ghi chú tại đây"
                                  onChange={this.handleChange}/>
                         </Col>
@@ -498,9 +547,10 @@ class StaffManagement extends Component {
                 </TabPane>
               </TabContent>
             <ModalFooter>
-              <Button color="primary" onClick={()=>this.toggleModal()}>Cập nhật</Button>{' '}
-              <Button color="secondary" onClick={()=>this.toggleModal()}>Đóng</Button>
+              <Button color="success" onClick={()=>this.handleUpdateUserInfo()}>Cập nhật</Button>{' '}
+              <Button color="danger" onClick={()=>this.toggleModal()}>Đóng</Button>
             </ModalFooter>
+            </form>
           </Modal>
         </div>
     )

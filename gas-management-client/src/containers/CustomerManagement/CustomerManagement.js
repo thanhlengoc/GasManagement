@@ -11,7 +11,7 @@ import {
   Button,
   Collapse,
   FormGroup,
-  Label,
+  Label, CardFooter,
 } from 'reactstrap';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
@@ -105,7 +105,11 @@ class CustomerManagement extends Component {
         returnCode: res.data.returnCode,
         returnMessage: res.data.returnMessage
       }, () => toast.success("Thêm khách hàng thành công."))
-    }).catch(err => {
+    }).then(() => {
+      this.handleResetForm();
+      window.location.reload();
+    })
+    .catch(err => {
       console.log(err);
       toast.error("Thêm khách hàng thất bại.")
     })
@@ -118,9 +122,6 @@ class CustomerManagement extends Component {
   render() {
     let currentDate = moment().format('DD/MM/YYYY');
     const {listAllCustomer} = this.state;
-    const fullName = this.props.fullName;
-    console.log("fullName: "+ fullName);
-    const {customerName, customerType,customerPhone,customerAddress, note} = this.state.customer;
     return (
         <div className="animated fadeIn parent-padding">
           <Row>
@@ -152,35 +153,34 @@ class CustomerManagement extends Component {
           <Row>
             <Col>
               <Card>
-                <CardHeader>
-                  <strong><i className="fa fa-plus"/> Thêm khách hàng
-                    mới</strong>
-                </CardHeader>
                 <CardBody>
                 <form id="form-create-customer">
-                  <Row>
-                    <Col xs="12" sm="6">
+                  <Row className="row justify-content-center" style={{padding:'20px 0'}}>
+                    <h3><i className="fa fa-plus"/> Thêm khách hàng mới</h3>
+                  </Row>
+                  <Row className="row justify-content-center" style={{padding:'20px 0'}}>
+                    <Col xs="12" sm="5">
                       <FormGroup>
                         <Label htmlFor="text-input">Tên khách hàng</Label>
-                        <Input name="nameCustomer" type="text" id="text-input"
+                        <Input name="nameCustomer" type="text" id="nameCustomer"
                                placeholder="Tên khách hàng"
                                onChange={this.handleChange}
                                required/>
                       </FormGroup>
                       <FormGroup>
                         <Label htmlFor="text-input">Loại khách hàng</Label>
-                        <Input name="customerType" type="text" id="text-input"
+                        <Input name="customerType" type="text" id="customerType"
                                placeholder="Loại khách hàng"
                                onChange={this.handleChange}/>
                       </FormGroup>
                     </Col>
-                    <Col xs="12" sm="6">
+                    <Col xs="12" sm="5">
                       <FormGroup row>
                         <Col xs="12" sm="3">
                           <Label htmlFor="text-input">Số điện thoại</Label>
                         </Col>
                         <Col xs="12" sm="9" style={{display: 'flex'}}>
-                          <Input name="phoneCustomer" type="text" id="text-input"
+                          <Input name="phoneCustomer" type="text" id="phoneCustomer"
                                  placeholder="Số điện thoại khách hàng"
                                  onChange={this.handleChange} required/>
                         </Col>
@@ -191,7 +191,7 @@ class CustomerManagement extends Component {
                         </Col>
                         <Col xs="12" sm="9">
                           <Input name="addressCustomer" type="text"
-                                 id="text-input"
+                                 id="addressCustomer"
                                  placeholder="Địa chỉ khách hàng"
                                  onChange={this.handleChange}
                                  required/>
@@ -230,11 +230,18 @@ class CustomerManagement extends Component {
                           <Label htmlFor="text-input">Ghi chú</Label>
                         </Col>
                         <Col xs="12" sm="9">
-                          <Input name="note" type="text" id="text-input"
+                          <Input name="note" type="text" id="note"
                                  placeholder="Ghi chú tại đây"
                                  onChange={this.handleChange}/>
                         </Col>
                       </FormGroup>
+                    </Col>
+                  </Row>
+                </form>
+                </CardBody>
+                <CardFooter>
+                  <Row className="row justify-content-center">
+                    <Col xs={12} sm={10}>
                       <Button className="pull-right"
                               onClick={() => this.handleResetForm()}
                               color="danger">
@@ -246,8 +253,7 @@ class CustomerManagement extends Component {
                         <i className="fa fa-plus"/> Thêm</Button>
                     </Col>
                   </Row>
-                </form>
-                </CardBody>
+                </CardFooter>
               </Card>
             </Col>
           </Row>

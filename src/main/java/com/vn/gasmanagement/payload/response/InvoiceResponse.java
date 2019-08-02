@@ -2,6 +2,7 @@ package com.vn.gasmanagement.payload.response;
 
 public class InvoiceResponse {
 
+  private Long InvoiceCode;
   private String dateOut;
   private int userSale;
   private int customerPurchase;
@@ -21,6 +22,7 @@ public class InvoiceResponse {
   private int oil;
   private int sugar;
   private int glass;
+  private int totalShell;
   private Long totalMoney;
   private Long payment;
   private int debtMoneyCus;
@@ -30,6 +32,14 @@ public class InvoiceResponse {
   private int debtB12Cus;
   private int debtB45Cus;
   private String note;
+
+  public Long getInvoiceCode() {
+    return InvoiceCode;
+  }
+
+  public void setInvoiceCode(Long invoiceCode) {
+    InvoiceCode = invoiceCode;
+  }
 
   public String getDateOut() {
     return dateOut;
@@ -253,5 +263,13 @@ public class InvoiceResponse {
 
   public void setNote(String note) {
     this.note = note;
+  }
+
+  public int getTotalShell() {
+    return totalShell;
+  }
+
+  public void setTotalShell(int totalShell) {
+    this.totalShell = totalShell;
   }
 }

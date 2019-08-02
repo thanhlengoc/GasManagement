@@ -1,6 +1,7 @@
 package com.vn.gasmanagement.service;
 
 import com.vn.gasmanagement.payload.request.NewCustomerRequest;
+import com.vn.gasmanagement.payload.request.UpdateCustomerRequest;
 import com.vn.gasmanagement.payload.response.BaseResponse;
 
 public interface CustomerService {
@@ -8,4 +9,6 @@ public interface CustomerService {
   BaseResponse getAllCustomer();
 
   BaseResponse createNewCustomer(NewCustomerRequest request);
+
+  BaseResponse updateCustomer(UpdateCustomerRequest request);
 }

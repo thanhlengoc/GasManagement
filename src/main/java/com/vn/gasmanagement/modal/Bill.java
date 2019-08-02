@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Bill")
 public class Bill implements java.io.Serializable {
 
   @Id

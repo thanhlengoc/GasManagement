@@ -1,5 +1,6 @@
 package com.vn.gasmanagement.config;
 
+import com.vn.gasmanagement.Main;
 import com.vn.gasmanagement.auth.CustomUserDetailService;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,8 +35,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-
-    http.cors();
+    if (Main.IS_DEV_ENV) {
+      http.cors();
+    }
 
     http
         .authorizeRequests()
@@ -66,18 +69,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .headers().frameOptions().sameOrigin();
   }
 
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web
+        .ignoring()
+        .antMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/vendors/**");
+  }
+
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-    CorsConfiguration corsConfiguration = new CorsConfiguration();
-    corsConfiguration.addAllowedOrigin("http://localhost:8081");
-    corsConfiguration.setAllowedMethods(Arrays.asList("GET", "HEAD", "POST", "PUT", "OPTIONS"));
-    corsConfiguration.addAllowedHeader("*");
-    corsConfiguration.addAllowedMethod("*");
-    corsConfiguration.setAllowCredentials(true);
-    source.registerCorsConfiguration("/**", corsConfiguration);
+    if (Main.IS_DEV_ENV) {
+      CorsConfiguration corsConfiguration = new CorsConfiguration();
+      corsConfiguration.addAllowedOrigin("http://localhost:8081");
+      corsConfiguration.addAllowedHeader("*");
+      corsConfiguration.addAllowedMethod("*");
+      corsConfiguration.setAllowCredentials(true);
+      source.registerCorsConfiguration("/**", corsConfiguration);
+    }
 
     return source;
   }

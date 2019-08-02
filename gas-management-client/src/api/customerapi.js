@@ -9,3 +9,7 @@ export function getAllCustomer() {
 export function createNewCustomer(request) {
   return httpPost(BASE_URI + "/create-new", request);
 }
+
+export function updateCustomerInfo(request) {
+  return httpPost(BASE_URI + "/update-info", request);
+}

@@ -7,5 +7,10 @@
   font-weight: bold;
 }
 
+.expand-table table td:hover {
+  white-space: normal;
+  overflow-x: auto;
+}
+
 
 

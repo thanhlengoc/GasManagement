@@ -6,6 +6,7 @@ import com.vn.gasmanagement.modal.Account;
 import com.vn.gasmanagement.modal.User;
 import com.vn.gasmanagement.payload.UserProfile;
 import com.vn.gasmanagement.payload.request.NewUserRequest;
+import com.vn.gasmanagement.payload.request.UpdateUserRequest;
 import com.vn.gasmanagement.payload.response.BaseResponse;
 import com.vn.gasmanagement.repository.AccountRepository;
 import com.vn.gasmanagement.repository.RoleRepository;
@@ -100,6 +101,33 @@ public class UserServiceImpl implements UserService {
     catch (Exception ex) {
       logger.error(ex.getMessage(), ex);
       return new BaseResponse(0,"Thêm nhân viên thất bại.", null);
+    }
+  }
+
+  @Override
+  public BaseResponse updateUser(UpdateUserRequest request) {
+    try {
+      User user = userRepository.findById(request.getUserId()).get();
+      if(user != null) {
+        user.setFullName(request.getFullName());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setCmnd(request.getCmnd());
+        user.setStartDateWork(request.getStartDateWork());
+        user.setAddress(request.getAddress());
+        user.setEndDateWork(request.getEndDateWork());
+        user.setNote(request.getNote());
+
+        userRepository.save(user);
+
+        return new BaseResponse(0, "Cập nhật thông tin nhân viên thất bại.", null);
+      }
+      else {
+        return new BaseResponse(0, "Không tìm thấy user.", null);
+      }
+    }
+    catch (Exception ex) {
+      logger.error(ex.getMessage(), ex);
+      return new BaseResponse(0, "Cập nhật thông tin nhân viên thất bại.", null);
     }
   }
 }

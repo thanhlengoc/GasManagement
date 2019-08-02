@@ -5,6 +5,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -13,7 +14,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Account")
 public class Account implements java.io.Serializable {
 
   @Id
@@ -21,19 +21,12 @@ public class Account implements java.io.Serializable {
   @Column(name = "Id", unique = true, nullable = false)
   private int id;
 
-  @Column(name = "Username", unique = true, nullable = false)
   private String username;
-
-  @Column(name = "Password", unique = true, nullable = false)
   private String password;
-
-  @Column(name = "passwordDecode")
   private String passwordDecode;
 
-  @OneToOne
-  @JoinTable(name = "account_role",
-      joinColumns = { @JoinColumn(name = "account_id", referencedColumnName = "id") },
-      inverseJoinColumns = { @JoinColumn(name = "role_id", referencedColumnName = "id") })
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @JoinColumn(name = "roleName")
   private Role role;
 
   private boolean enable;

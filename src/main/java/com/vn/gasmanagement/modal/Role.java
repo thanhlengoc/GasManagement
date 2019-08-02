@@ -2,6 +2,7 @@ package com.vn.gasmanagement.modal;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,19 +14,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Role")
 public class Role implements java.io.Serializable {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
-  @Column(name = "Id", unique = true, nullable = false)
+  @Column(name = "id", unique = true, nullable = false)
   private int id;
 
-  @Column(name = "RoleName", unique = true)
+  @Column(name = "roleName", unique = true, nullable = false)
   private String roleName;
-
-  @Column(name = "xoaFlag")
-  private boolean xoaFlag;
 
   @OneToOne(mappedBy = "role")
   private Account account;
@@ -47,10 +44,6 @@ public class Role implements java.io.Serializable {
   public void setRoleName(String roleName) {
     this.roleName = roleName;
   }
-
-  public boolean isXoaFlag() { return xoaFlag; }
-
-  public void setXoaFlag(boolean xoaFlag) { this.xoaFlag = xoaFlag; }
 
   public Account getAccount() { return account; }
 

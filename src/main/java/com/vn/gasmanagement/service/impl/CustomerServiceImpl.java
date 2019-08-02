@@ -2,6 +2,7 @@ package com.vn.gasmanagement.service.impl;
 
 import com.vn.gasmanagement.modal.Customer;
 import com.vn.gasmanagement.payload.request.NewCustomerRequest;
+import com.vn.gasmanagement.payload.request.UpdateCustomerRequest;
 import com.vn.gasmanagement.payload.response.BaseResponse;
 import com.vn.gasmanagement.repository.CustomerRepository;
 import com.vn.gasmanagement.service.CustomerService;
@@ -50,6 +51,32 @@ public class CustomerServiceImpl implements CustomerService {
     catch (Exception ex) {
       logger.error(ex.getMessage(), ex);
       return new BaseResponse(0, "create customer fail.", null);
+    }
+  }
+
+  @Override
+  public BaseResponse updateCustomer(UpdateCustomerRequest request) {
+    try {
+      Customer customer = customerRepository.findById(request.getCusId()).get();
+      if (customer != null) {
+        customer.setCustomerName(request.getCusName());
+        customer.setCustomerType(request.getCusType());
+        customer.setCustomerPhone(request.getCusPhone());
+        customer.setStartDateBuy(request.getStartBuy());
+        customer.setCustomerAddress(request.getCusAddress());
+        customer.setLastPurchaseDate(request.getLastBuy());
+        customer.setNote(request.getNote());
+        customerRepository.save(customer);
+
+        return new BaseResponse(1, "Cập nhật thông tin khách hàng thành công.", customer);
+      }
+      else {
+        return new BaseResponse(0, "Không tìm thấy khách hàng này.", null);
+      }
+    }
+    catch (Exception ex) {
+      logger.error(ex.getMessage(), ex);
+      return new BaseResponse(0, "Cập nhật thông tin khách hàng thất bại.", null);
     }
   }
 }

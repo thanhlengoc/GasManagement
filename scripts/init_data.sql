@@ -1,0 +1,3 @@
+CREATE DATABASE [IF NOT EXISTS] database_name
+[CHARACTER SET UTF-8]
+[COLLATE collation_name]
