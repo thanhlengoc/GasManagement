@@ -11,12 +11,12 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @SpringBootApplication
 @EnableAsync
-@PropertySource(value = {"classpath:${appenv}.config.properties",
-		"classpath:${appenv}.dbs.properties"})
+//@PropertySource(value = {"classpath:${appenv}.config.properties",
+//		"classpath:${appenv}.dbs.properties"})
 public class Main {
 
-	public static final String APP_ENV = System.getProperty("appenv", "development");
-	public static boolean IS_DEV_ENV = (APP_ENV.equals("dev")) ? true : false;
+//	public static final String APP_ENV = System.getProperty("appenv", "dev");
+//	public static boolean IS_DEV_ENV = (APP_ENV.equals("dev")) ? true : false;
 
 	private static ApplicationContext ctx;
 

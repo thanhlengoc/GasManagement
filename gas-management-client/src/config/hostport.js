@@ -1,1 +1,0 @@
-export const HOST_PORT = 'http://localhost:8082';

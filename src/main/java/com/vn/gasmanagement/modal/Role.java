@@ -2,6 +2,7 @@ package com.vn.gasmanagement.modal;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,11 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-public class Role implements java.io.Serializable {
+public class Role {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -24,8 +26,8 @@ public class Role implements java.io.Serializable {
   @Column(name = "roleName", unique = true, nullable = false)
   private String roleName;
 
-  @OneToOne(mappedBy = "role")
-  private Account account;
+  @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Account> accounts;
 
   public Role() { }
 
@@ -45,7 +47,7 @@ public class Role implements java.io.Serializable {
     this.roleName = roleName;
   }
 
-  public Account getAccount() { return account; }
+  public Set<Account> getAccounts() { return accounts; }
 
-  public void setAccount(Account account) { this.account = account; }
+  public void setAccounts(Set<Account> accounts) { this.accounts = accounts; }
 }

@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class OtherItem implements java.io.Serializable {
+public class OtherItem {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)

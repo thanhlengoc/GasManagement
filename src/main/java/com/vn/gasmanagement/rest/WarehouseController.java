@@ -7,9 +7,11 @@ import com.vn.gasmanagement.service.impl.WarehouseServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,8 +29,18 @@ public class WarehouseController {
     return warehouseService.inWarehouse(request);
   }
 
-  @PostMapping(value = "/table")
-  public BaseResponse tableInWarehouse(@RequestBody DatePartition datePartition) {
-    return warehouseService.tableInWarehouse(datePartition.getDateFrom(), datePartition.getDateTo());
+  @GetMapping(value = "/table-in-warehouse")
+  public BaseResponse tableInWarehouse(@RequestParam String dateFrom,@RequestParam String dateTo) {
+    return warehouseService.tableInWarehouse(dateFrom, dateTo);
+  }
+
+  @GetMapping(value="/table-out-warehouse")
+  public BaseResponse tableOutWarehouse(@RequestParam String dateFrom,@RequestParam String dateTo) {
+    return warehouseService.tableOutWarehouse(dateFrom, dateTo);
+  }
+
+  @GetMapping(value="/table-exist-end")
+  public BaseResponse tableExistEnd(@RequestParam String dateFrom,@RequestParam String dateTo) {
+    return warehouseService.tableExistEnd(dateFrom, dateTo);
   }
 }

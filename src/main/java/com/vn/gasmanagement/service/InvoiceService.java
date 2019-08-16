@@ -1,5 +1,6 @@
 package com.vn.gasmanagement.service;
 
+import com.vn.gasmanagement.dto.InvoiceDTO;
 import com.vn.gasmanagement.payload.request.DatePartition;
 import com.vn.gasmanagement.payload.request.InvoiceRequest;
 import com.vn.gasmanagement.payload.response.BaseResponse;
@@ -10,7 +11,7 @@ public interface InvoiceService {
 
   BaseResponse createInvoice(InvoiceRequest request);
 
-  void exportInvoice(String param, HttpServletResponse response);
+  void exportInvoice(InvoiceDTO invoiceDTO, HttpServletResponse response);
 
   BaseResponse getListInvoiceCustomer(int customerId);
 
@@ -18,5 +19,5 @@ public interface InvoiceService {
 
   BaseResponse getAllInvoice() throws SQLException;
 
-  BaseResponse handleDataInOut() throws SQLException;
+  BaseResponse handleDataInOut(String dateFrom, String dateTo) throws SQLException;
 }

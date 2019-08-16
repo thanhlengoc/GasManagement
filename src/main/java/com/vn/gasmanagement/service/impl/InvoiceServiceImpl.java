@@ -1,10 +1,42 @@
 package com.vn.gasmanagement.service.impl;
 
+import static com.vn.gasmanagement.constant.ReportConstant.EX_INWAREHOUSE_B12;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_INWAREHOUSE_B45;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_INWAREHOUSE_DATEADDED;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_INWAREHOUSE_DEBT_ELF39KG;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_INWAREHOUSE_DEBT_ELF6KG;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_INWAREHOUSE_ELF12KG;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_B12;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_B45;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_DATEOUT;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_ELF12KG;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_ELF39KG;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_ELF6KG;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_OTHER;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_PAYMENT;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_PROMOTION_GLASS;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_PROMOTION_OIL;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_PROMOTION_SUGAR;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_REGAINSHELL_B12;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_REGAINSHELL_B45;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_REGAINSHELL_ELF12KG;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_REGAINSHELL_ELF39KG;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_REGAINSHELL_ELF6KG;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_TOTALMONEY;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_UNIT;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_UNITPRICE_B12;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_UNITPRICE_B45;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_UNITPRICE_ELF12KG;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_UNITPRICE_ELF39KG;
+import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_UNITPRICE_ELF6KG;
 import static com.vn.gasmanagement.constant.ReportConstant.INVOICE_TEMPLATE_FILE;
 import static com.vn.gasmanagement.constant.ReportConstant.PDF_FILE_TYPE;
 
+import com.vn.gasmanagement.dto.InvoiceDTO;
 import com.vn.gasmanagement.modal.Bill;
 import com.vn.gasmanagement.modal.BillDetail;
+import com.vn.gasmanagement.modal.RegainShell;
+import com.vn.gasmanagement.modal.RegainShellDetail;
 import com.vn.gasmanagement.payload.request.DatePartition;
 import com.vn.gasmanagement.payload.request.InvoiceRequest;
 import com.vn.gasmanagement.payload.response.BaseResponse;
@@ -16,6 +48,7 @@ import com.vn.gasmanagement.repository.BillRepository;
 import com.vn.gasmanagement.repository.GasRepository;
 import com.vn.gasmanagement.service.InvoiceService;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +75,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
   @Override
   public BaseResponse createInvoice(InvoiceRequest request) {
+    List<BillDetail> billDetails = new ArrayList<>();
+    RegainShell regainShell = new RegainShell();
+    List<RegainShellDetail> regainShellDetails = new ArrayList<>();
     try {
       Bill bill = new Bill();
       bill.setInvoiceDate(request.getDateOut());
@@ -57,6 +93,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         b12.setGasId(4);
         b12.setBillId(bill.getId());
         billDetailRepository.save(b12);
+        billDetails.add(b12);
       }
       if (request.getB45() != 0) {
         BillDetail b45 = new BillDetail();
@@ -64,6 +101,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         b45.setGasId(5);
         b45.setAmount(request.getB45());
         billDetailRepository.save(b45);
+        billDetails.add(b45);
       }
       if (request.getElf6kg() != 0) {
         BillDetail elf6kg = new BillDetail();
@@ -71,6 +109,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         elf6kg.setBillId(bill.getId());
         elf6kg.setAmount(request.getElf6kg());
         billDetailRepository.save(elf6kg);
+        billDetails.add(elf6kg);
       }
       if (request.getElf12kg() != 0) {
         BillDetail elf12kg = new BillDetail();
@@ -78,6 +117,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         elf12kg.setBillId(bill.getId());
         elf12kg.setAmount(request.getElf12kg());
         billDetailRepository.save(elf12kg);
+        billDetails.add(elf12kg);
       }
       if (request.getElf39kg() != 0) {
         BillDetail elf39kg = new BillDetail();
@@ -85,6 +125,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         elf39kg.setBillId(bill.getId());
         elf39kg.setAmount(request.getElf39kg());
         billDetailRepository.save(elf39kg);
+        billDetails.add(elf39kg);
       }
 
       int totalAmount = request.getB12() + request.getB45() + request.getElf6kg()
@@ -103,7 +144,13 @@ public class InvoiceServiceImpl implements InvoiceService {
       bill.setTotalMoney(totalMoney);
       billRepository.save(bill);
 
-      return new BaseResponse(1, "Tạo hóa đơn thành công.", bill);
+      InvoiceDTO invoiceDTO = new InvoiceDTO();
+      invoiceDTO.setBill(bill);
+      invoiceDTO.setBillDetails(billDetails);
+      invoiceDTO.setRegainShell(regainShell);
+      invoiceDTO.setRegainShellDetails(regainShellDetails);
+
+      return new BaseResponse(1, "Tạo hóa đơn thành công.", invoiceDTO);
     }
     catch (Exception ex) {
       logger.error(ex.getMessage(), ex);
@@ -112,7 +159,7 @@ public class InvoiceServiceImpl implements InvoiceService {
   }
 
   @Override
-  public void exportInvoice(String param, HttpServletResponse response) {
+  public void exportInvoice(InvoiceDTO invoiceDTO, HttpServletResponse response) {
     try {
       final ReportEngine report = ReportEngineFactory.createInstance(PDF_FILE_TYPE);
       if (report == null){
@@ -120,6 +167,35 @@ public class InvoiceServiceImpl implements InvoiceService {
       }
       final List<Map<String, String>> list = new ArrayList<>();
       final Map<String, Object> parameters = new HashMap<>();
+      final DecimalFormat nf = new DecimalFormat("#,###,###,##0");
+      Map<String, String> row = new HashMap<>();
+      Bill bill = invoiceDTO.getBill();
+      List<BillDetail> billDetailList = invoiceDTO.getBillDetails();
+      row.put(EX_OUTWAREHOUSE_DATEOUT, bill.getInvoiceDate());
+      row.put(EX_OUTWAREHOUSE_ELF6KG, "");
+      row.put(EX_OUTWAREHOUSE_ELF12KG, "");
+      row.put(EX_OUTWAREHOUSE_ELF39KG, "");
+      row.put(EX_OUTWAREHOUSE_B12, "");
+      row.put(EX_OUTWAREHOUSE_B45, "");
+      row.put(EX_OUTWAREHOUSE_OTHER, "");
+      row.put(EX_OUTWAREHOUSE_UNIT, "");
+      row.put(EX_OUTWAREHOUSE_UNITPRICE_ELF6KG, "");
+      row.put(EX_OUTWAREHOUSE_UNITPRICE_ELF12KG, "");
+      row.put(EX_OUTWAREHOUSE_UNITPRICE_ELF39KG, "");
+      row.put(EX_OUTWAREHOUSE_UNITPRICE_B12, "");
+      row.put(EX_OUTWAREHOUSE_UNITPRICE_B45, "");
+      row.put(EX_OUTWAREHOUSE_REGAINSHELL_ELF6KG, "");
+      row.put(EX_OUTWAREHOUSE_REGAINSHELL_ELF12KG, "");
+      row.put(EX_OUTWAREHOUSE_REGAINSHELL_ELF39KG, "");
+      row.put(EX_OUTWAREHOUSE_REGAINSHELL_B12, "");
+      row.put(EX_OUTWAREHOUSE_REGAINSHELL_B45, "");
+      row.put(EX_OUTWAREHOUSE_PROMOTION_OIL, "");
+      row.put(EX_OUTWAREHOUSE_PROMOTION_SUGAR, "");
+      row.put(EX_OUTWAREHOUSE_PROMOTION_GLASS, "");
+      row.put(EX_OUTWAREHOUSE_TOTALMONEY, "");
+      row.put(EX_OUTWAREHOUSE_PAYMENT, "");
+
+      list.add(row);
       report.render(INVOICE_TEMPLATE_FILE, parameters, list, response);
     }
     catch (Exception ex) {
@@ -237,10 +313,10 @@ public class InvoiceServiceImpl implements InvoiceService {
   }
 
   @Override
-  public BaseResponse handleDataInOut() throws SQLException {
+  public BaseResponse handleDataInOut(String dateFrom, String dateTo) throws SQLException {
     try {
 
-      return new BaseResponse(0,"Lấy thông tin thu chi thành công từ server.", null);
+      return new BaseResponse(1,"Lấy thông tin thu chi thành công từ server.", null);
     }
     catch (Exception ex) {
       logger.error(ex.getMessage(), ex);

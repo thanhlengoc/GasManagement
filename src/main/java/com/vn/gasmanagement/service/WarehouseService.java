@@ -8,4 +8,6 @@ public interface WarehouseService {
   BaseResponse inWarehouse(InWarehouseRequest request);
 
   BaseResponse tableInWarehouse(String dateFrom, String dateTo);
+  BaseResponse tableOutWarehouse(String dateFrom, String dateTo);
+  BaseResponse tableExistEnd(String dateFrom, String dateTo);
 }

@@ -1,0 +1,26 @@
+// Here you can add other styles
+.table-ant thead > tr > th {
+  background-color: #acb4bc
+}
+
+.input-content {
+  font-weight: bold;
+}
+
+//.expand-table table td:hover {
+//  white-space: normal;
+//  overflow-x: auto;
+//}
+
+.expand-table table td {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.expand-table table th {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+
+

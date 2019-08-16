@@ -19,8 +19,9 @@ import com.vn.gasmanagement.repository.PayShellDetailRepository;
 import com.vn.gasmanagement.repository.PayShellRepository;
 import com.vn.gasmanagement.repository.PromotionRepository;
 import com.vn.gasmanagement.service.WarehouseService;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,8 @@ public class WarehouseServiceImpl implements WarehouseService {
   public BaseResponse inWarehouse(InWarehouseRequest request) {
     try {
       ImportCoupon importCoupon = new ImportCoupon();
-      importCoupon.setDateAdded(Date.valueOf(request.getDateIn()));
+      SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+      importCoupon.setDateAdded(format.parse(request.getDateIn()));
       importCoupon.setPersonAdded(request.getPersonIn());
       importCoupon.setOther(request.getOther());
       importCoupon.setNote(request.getNote());
@@ -164,61 +166,20 @@ public class WarehouseServiceImpl implements WarehouseService {
       importCoupon.setTotalAmount(request.getB12()+request.getB45()+request.getElf6kg()
           +request.getElf12kg()+request.getElf39kg());
 
-      Long unitPriceB12 = gasRepository.findById(4).get().getUnitPriceIn();
-      Long unitPriceB45 = gasRepository.findById(5).get().getUnitPriceIn();
-      Long unitPriceElf6 = gasRepository.findById(1).get().getUnitPriceIn();
-      Long unitPriceElf12 = gasRepository.findById(2).get().getUnitPriceIn();
-      Long unitPriceElf39 = gasRepository.findById(3).get().getUnitPriceIn();
-      importCoupon.setTotalMoney(
-          request.getB12()*unitPriceB12 +
-          request.getB45()*unitPriceB45 +
-          request.getElf6kg()*unitPriceElf6 +
-          request.getElf12kg()*unitPriceElf12 +
-          request.getElf39kg()*unitPriceElf39
-      );
-
-      Debt debt = new Debt();
-      debt.setDate(request.getDateIn());
-      debt.setDebtMoney(importCoupon.getTotalMoney() - importCoupon.getPayment());
-      debtRepository.save(debt);
-
-      importCoupon.setIdDebt(debt.getId());
-      importCouponRepository.save(importCoupon);
-
-      if(request.getDebtElf6kg() != 0) {
-        DebtDetail elf6 = new DebtDetail();
-        elf6.setDebtId(debt.getId());
-        elf6.setGasId(1);
-        elf6.setAmount(request.getDebtElf6kg());
-        debtDetailRepository.save(elf6);
-      }
-      if(request.getDebtElf12kg() != 0) {
-        DebtDetail elf12 = new DebtDetail();
-        elf12.setDebtId(debt.getId());
-        elf12.setGasId(2);
-        elf12.setAmount(request.getDebtElf12kg());
-        debtDetailRepository.save(elf12);
-      }
-      if(request.getDebtElf39kg() != 0) {
-        DebtDetail elf39 = new DebtDetail();
-        elf39.setDebtId(debt.getId());
-        elf39.setGasId(3);
-        elf39.setAmount(request.getDebtElf39kg());
-        debtDetailRepository.save(elf39);
-      }
-      if(request.getDebtB12() != 0) {
-        DebtDetail b12 = new DebtDetail();
-        b12.setDebtId(debt.getId());
-        b12.setGasId(4);
-        b12.setAmount(request.getDebtB12());
-        debtDetailRepository.save(b12);
-      }
-      if(request.getDebtB45() != 0) {
-        DebtDetail b45 = new DebtDetail();
-        b45.setDebtId(debt.getId());
-        b45.setGasId(5);
-        b45.setAmount(request.getDebtB45());
-        debtDetailRepository.save(b45);
+      Integer gasRepoSize = gasRepository.findAll().size();
+      if (gasRepoSize >= 5) {
+        Long unitPriceB12 = gasRepository.findById(4).get().getUnitPriceIn();
+        Long unitPriceB45 = gasRepository.findById(5).get().getUnitPriceIn();
+        Long unitPriceElf6 = gasRepository.findById(1).get().getUnitPriceIn();
+        Long unitPriceElf12 = gasRepository.findById(2).get().getUnitPriceIn();
+        Long unitPriceElf39 = gasRepository.findById(3).get().getUnitPriceIn();
+        importCoupon.setTotalMoney(
+            request.getB12()*unitPriceB12 +
+                request.getB45()*unitPriceB45 +
+                request.getElf6kg()*unitPriceElf6 +
+                request.getElf12kg()*unitPriceElf12 +
+                request.getElf39kg()*unitPriceElf39
+        );
       }
 
       return new BaseResponse(1, "Lưu phiếu nhập thành công.", importCoupon);
@@ -352,6 +313,26 @@ public class WarehouseServiceImpl implements WarehouseService {
     catch (Exception ex) {
       logger.error(ex.getMessage(), ex);
       return new BaseResponse(0, "Lỗi khi lấy tất cả thông tin nhập kho.", null);
+    }
+  }
+
+  @Override
+  public BaseResponse tableOutWarehouse(String dateFrom, String dateTo) {
+    try {
+      return new BaseResponse(1, "Lấy thông tin thành công.", null);
+    }
+    catch (Exception ex) {
+      return new BaseResponse(0, "Lấy thông tin thất bại.", null);
+    }
+  }
+
+  @Override
+  public BaseResponse tableExistEnd(String dateFrom, String dateTo) {
+    try {
+      return new BaseResponse(1, "Lấy thông tin thành công.", null);
+    }
+    catch (Exception ex) {
+      return new BaseResponse(0, "Lấy thông tin thất bại.", null);
     }
   }
 }

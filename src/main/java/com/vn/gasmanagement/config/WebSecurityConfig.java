@@ -1,8 +1,6 @@
 package com.vn.gasmanagement.config;
 
-import com.vn.gasmanagement.Main;
 import com.vn.gasmanagement.auth.CustomUserDetailService;
-import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,9 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    if (Main.IS_DEV_ENV) {
-      http.cors();
-    }
+    http.cors();
 
     http
         .authorizeRequests()
@@ -80,14 +76,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   CorsConfigurationSource corsConfigurationSource() {
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    if (Main.IS_DEV_ENV) {
-      CorsConfiguration corsConfiguration = new CorsConfiguration();
-      corsConfiguration.addAllowedOrigin("http://localhost:8081");
-      corsConfiguration.addAllowedHeader("*");
-      corsConfiguration.addAllowedMethod("*");
-      corsConfiguration.setAllowCredentials(true);
-      source.registerCorsConfiguration("/**", corsConfiguration);
-    }
+    CorsConfiguration corsConfiguration = new CorsConfiguration();
+    corsConfiguration.addAllowedOrigin("http://localhost:8080");
+    corsConfiguration.addAllowedHeader("*");
+    corsConfiguration.addAllowedMethod("*");
+    corsConfiguration.setAllowCredentials(true);
+    source.registerCorsConfiguration("/**", corsConfiguration);
 
     return source;
   }

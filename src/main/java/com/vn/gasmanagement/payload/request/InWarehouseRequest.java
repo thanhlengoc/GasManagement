@@ -20,12 +20,12 @@ public class InWarehouseRequest {
   private int sugar;
   private int glass;
   private Long payment;
-  private int debtMoney;
-  private int debtElf6kg;
-  private int debtElf12kg;
-  private int debtElf39kg;
-  private int debtB12;
-  private int debtB45;
+//  private int debtMoney;
+//  private int debtElf6kg;
+//  private int debtElf12kg;
+//  private int debtElf39kg;
+//  private int debtB12;
+//  private int debtB45;
   private String note;
 
   public String getDateIn() {
@@ -172,53 +172,53 @@ public class InWarehouseRequest {
     this.payment = payment;
   }
 
-  public int getDebtMoney() {
-    return debtMoney;
-  }
-
-  public void setDebtMoney(int debtMoney) {
-    this.debtMoney = debtMoney;
-  }
-
-  public int getDebtElf6kg() {
-    return debtElf6kg;
-  }
-
-  public void setDebtElf6kg(int debtElf6kg) {
-    this.debtElf6kg = debtElf6kg;
-  }
-
-  public int getDebtElf12kg() {
-    return debtElf12kg;
-  }
-
-  public void setDebtElf12kg(int debtElf12kg) {
-    this.debtElf12kg = debtElf12kg;
-  }
-
-  public int getDebtElf39kg() {
-    return debtElf39kg;
-  }
-
-  public void setDebtElf39kg(int debtElf39kg) {
-    this.debtElf39kg = debtElf39kg;
-  }
-
-  public int getDebtB12() {
-    return debtB12;
-  }
-
-  public void setDebtB12(int debtB12) {
-    this.debtB12 = debtB12;
-  }
-
-  public int getDebtB45() {
-    return debtB45;
-  }
-
-  public void setDebtB45(int debtB45) {
-    this.debtB45 = debtB45;
-  }
+//  public int getDebtMoney() {
+//    return debtMoney;
+//  }
+//
+//  public void setDebtMoney(int debtMoney) {
+//    this.debtMoney = debtMoney;
+//  }
+//
+//  public int getDebtElf6kg() {
+//    return debtElf6kg;
+//  }
+//
+//  public void setDebtElf6kg(int debtElf6kg) {
+//    this.debtElf6kg = debtElf6kg;
+//  }
+//
+//  public int getDebtElf12kg() {
+//    return debtElf12kg;
+//  }
+//
+//  public void setDebtElf12kg(int debtElf12kg) {
+//    this.debtElf12kg = debtElf12kg;
+//  }
+//
+//  public int getDebtElf39kg() {
+//    return debtElf39kg;
+//  }
+//
+//  public void setDebtElf39kg(int debtElf39kg) {
+//    this.debtElf39kg = debtElf39kg;
+//  }
+//
+//  public int getDebtB12() {
+//    return debtB12;
+//  }
+//
+//  public void setDebtB12(int debtB12) {
+//    this.debtB12 = debtB12;
+//  }
+//
+//  public int getDebtB45() {
+//    return debtB45;
+//  }
+//
+//  public void setDebtB45(int debtB45) {
+//    this.debtB45 = debtB45;
+//  }
 
   public String getNote() {
     return note;

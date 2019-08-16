@@ -11,7 +11,7 @@ import org.springframework.data.annotation.TypeAlias;
 
 @Entity
 @Table(name = "PayShellDetail")
-public class PayShellDetail implements java.io.Serializable {
+public class PayShellDetail {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)

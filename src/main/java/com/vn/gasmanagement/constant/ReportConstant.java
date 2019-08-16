@@ -44,7 +44,7 @@ public class ReportConstant {
   public static final String EX_INWAREHOUSE_DEBT_B45 = "DEBTB45";
   public static final String EX_INWAREHOUSE_NOTE = "NOTE";
 
-  public static final String EX_OUTWAREHOUSE_DATEADDED = "DATEADDED";
+  public static final String EX_OUTWAREHOUSE_DATEOUT = "DATEADDED";
   public static final String EX_OUTWAREHOUSE_ELF6KG = "ELF6KG";
   public static final String EX_OUTWAREHOUSE_ELF12KG = "ELF12KG";
   public static final String EX_OUTWAREHOUSE_ELF39KG = "ELF39KG";
@@ -57,11 +57,11 @@ public class ReportConstant {
   public static final String EX_OUTWAREHOUSE_UNITPRICE_ELF39KG = "UNITPRICEELF39KG";
   public static final String EX_OUTWAREHOUSE_UNITPRICE_B12 = "UNITPRICEB12";
   public static final String EX_OUTWAREHOUSE_UNITPRICE_B45 = "UNITPRICEB45";
-  public static final String EX_OUTWAREHOUSE_PAYSHELL_ELF6KG = "PAYSHELLELF6KG";
-  public static final String EX_OUTWAREHOUSE_PAYSHELL_ELF12KG = "PAYSHELLELF12KG";
-  public static final String EX_OUTWAREHOUSE_PAYSHELL_ELF39KG = "PAYSHELLELF39KG";
-  public static final String EX_OUTWAREHOUSE_PAYSHELL_B12 = "PAYSHELLB12";
-  public static final String EX_OUTWAREHOUSE_PAYSHELL_B45 = "PAYSHELLB45";
+  public static final String EX_OUTWAREHOUSE_REGAINSHELL_ELF6KG = "PAYSHELLELF6KG";
+  public static final String EX_OUTWAREHOUSE_REGAINSHELL_ELF12KG = "PAYSHELLELF12KG";
+  public static final String EX_OUTWAREHOUSE_REGAINSHELL_ELF39KG = "PAYSHELLELF39KG";
+  public static final String EX_OUTWAREHOUSE_REGAINSHELL_B12 = "PAYSHELLB12";
+  public static final String EX_OUTWAREHOUSE_REGAINSHELL_B45 = "PAYSHELLB45";
   public static final String EX_OUTWAREHOUSE_PROMOTION_OIL = "PROMOTIONOIL";
   public static final String EX_OUTWAREHOUSE_PROMOTION_SUGAR = "PROMOTIONSUGAR";
   public static final String EX_OUTWAREHOUSE_PROMOTION_GLASS = "PROMOTIONGLASS";

@@ -2,7 +2,7 @@ package com.vn.gasmanagement.modal;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import java.sql.Date;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ImportCoupon")
-public class ImportCoupon implements java.io.Serializable {
+public class ImportCoupon {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)

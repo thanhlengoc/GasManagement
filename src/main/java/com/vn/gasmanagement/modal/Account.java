@@ -10,11 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-public class Account implements java.io.Serializable {
+public class Account {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -25,8 +26,8 @@ public class Account implements java.io.Serializable {
   private String password;
   private String passwordDecode;
 
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(name = "roleName")
+  @ManyToOne
+  @JoinColumn
   private Role role;
 
   private boolean enable;

@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "DebtDetail")
-public class DebtDetail implements java.io.Serializable {
+public class DebtDetail {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)

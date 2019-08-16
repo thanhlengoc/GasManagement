@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ImportCouponDetail")
-public class ImportCouponDetail implements java.io.Serializable {
+public class ImportCouponDetail {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
