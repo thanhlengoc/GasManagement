@@ -195,9 +195,12 @@ class ModalMoreInfo extends Component {
     })
   };
 
-  handleExportInvoice = (param) => {
-    if (param) {
-      let window = window.open(exportInvoice(param), '_blank');
+  handleExportInvoice = (requestParam) => {
+    if (requestParam) {
+      let params = "";
+      Object.keys(requestParam).map(i => params += i + '=' + requestParam[i] + '&');
+      let url = "api/bill/export-invoice?" + params.substring(0, params.length -1);
+      let window = window.open(url, '_blank');
       window.focus();
     }
   };
@@ -297,14 +300,17 @@ class ModalMoreInfo extends Component {
                 <form id="form-create-invoice">
                 <Row>
                   <Col xs="12" sm="12" style={{padding: '0 30px'}}>
-                    <Row>
+                    <Row className="row justify-content-center">
                       <Col style={{textAlign: 'center'}}>
                         <h2>GAS HƯNG LỢI HƯNG</h2>
+                      {/*<h6>233 Dương Vân Nga, Phường Vĩnh Hải, Thành phố Nha Trang, Tỉnh Khánh Hòa</h6>*/}
+                      {/*<h5>Hotline: 0987 323 789</h5>*/}
+                      {/*<h4>HÓA ĐƠN BÁN HÀNG</h4>*/}
                       </Col>
                     </Row>
                     <Row>
                       <Col style={{textAlign: 'center'}}>
-                        <h6>18 Hồng Hà, Nha Trang</h6>
+                        <h6>233 Dương Vân Nga, Phường Vĩnh Hải, Thành phố Nha Trang, Tỉnh Khánh Hòa</h6>
                       </Col>
                     </Row>
                     <Row>
@@ -320,7 +326,7 @@ class ModalMoreInfo extends Component {
                     </Row>
                     <Row style={{marginBottom: '20px'}}>
                       <Col style={{textAlign: 'center'}}>
-                        <h5>ID: HD440705</h5>
+                        <h5>HĐ Số: HD440705</h5>
                       </Col>
                     </Row>
                     <Row style={{marginBottom: '10px'}}>
@@ -402,12 +408,18 @@ class ModalMoreInfo extends Component {
                       alignItems: 'center'
                     }}>
                       <Col>
-                        <Input type="text" id="text-input"
-                               className="pull-right"
-                               style={{marginLeft: '10px', width: '350px'}}
-                               placeholder="Thành tiền"
-                               onChange={this.handleChange}
-                               readOnly/>
+                        <NumberFormat className="pull-right"
+                                      thousandSeparator={true}
+                                      style={{marginLeft: '10px', width: '350px'}}
+                                      placeholder="Thành tiền"
+                                      readOnly
+                        />
+                        {/*<Input type="text" id="text-input"*/}
+                        {/*       className="pull-right"*/}
+                        {/*       style={{marginLeft: '10px', width: '350px'}}*/}
+                        {/*       placeholder="Thành tiền"*/}
+                        {/*       //onChange={this.handleChange}*/}
+                        {/*       readOnly/>*/}
                         <Label htmlFor="text-input"
                                className="pull-right"><strong>Thành
                           tiền:</strong></Label>
@@ -424,7 +436,7 @@ class ModalMoreInfo extends Component {
                                style={{marginLeft: '10px', width: '350px'}}
                                placeholder="Chiết khấu"
                                onChange={this.handleChange}
-                               required/>
+                        />
                         <Label htmlFor="text-input" className="pull-right">Chiết
                           khấu:</Label>
                       </Col>
@@ -435,12 +447,18 @@ class ModalMoreInfo extends Component {
                       alignItems: 'center'
                     }}>
                       <Col>
-                        <Input name="nameCustomer" type="text" id="text-input"
-                               className="pull-right"
-                               style={{marginLeft: '10px', width: '350px'}}
-                               placeholder="Tổng cộng"
-                               onChange={this.handleChange}
-                               readOnly/>
+                        <NumberFormat className="pull-right"
+                                      style={{marginLeft: '10px', width: '350px'}}
+                                      placeholder="Tổng cộng"
+                                      thousandSeparator={true}
+                                      readOnly
+                        />
+                        {/*<Input name="nameCustomer" type="text" id="text-input"*/}
+                        {/*       className="pull-right"*/}
+                        {/*       style={{marginLeft: '10px', width: '350px'}}*/}
+                        {/*       placeholder="Tổng cộng"*/}
+                        {/*       // onChange={this.handleChange}*/}
+                        {/*       readOnly/>*/}
                         <Label htmlFor="text-input"
                                className="pull-right"><strong>Tổng
                           cộng:</strong></Label>

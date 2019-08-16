@@ -29,6 +29,7 @@ import {
   getListDataOutWarehouse
 } from "../../api/warehouseApi";
 import {toast} from "react-toastify";
+import NumberFormat from "react-number-format";
 
 let month = moment().format("DD/MM/YYYY");
 let lastMonth = moment().startOf('month').format("DD/MM/YYYY");
@@ -621,10 +622,13 @@ class WarehouseManagement extends Component {
                     <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                       <strong>Trả tiền:</strong>
                     </Label>
-                    <Input name="payment" type="text" id="text-input"
-                           placeholder="Trả tiền"
-                           onChange={this.handleChange}
-                           required/>
+                    {/*<Input name="payment" type="text" id="text-input"*/}
+                    {/*       placeholder="Trả tiền"*/}
+                    {/*       onChange={this.handleChange}/>*/}
+                    <NumberFormat thousandSeparator={true} placeholder="Trả tiền"
+                                  name="payment"
+                                  onChange={this.handleChange}
+                    />
                   </Col>
                 </FormGroup>
                 <FormGroup row>

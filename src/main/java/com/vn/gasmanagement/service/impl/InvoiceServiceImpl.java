@@ -32,9 +32,12 @@ import static com.vn.gasmanagement.constant.ReportConstant.EX_OUTWAREHOUSE_UNITP
 import static com.vn.gasmanagement.constant.ReportConstant.INVOICE_TEMPLATE_FILE;
 import static com.vn.gasmanagement.constant.ReportConstant.PDF_FILE_TYPE;
 
+import com.vn.gasmanagement.dto.BalanceSheetDTO;
 import com.vn.gasmanagement.dto.InvoiceDTO;
 import com.vn.gasmanagement.modal.Bill;
 import com.vn.gasmanagement.modal.BillDetail;
+import com.vn.gasmanagement.modal.ImportCoupon;
+import com.vn.gasmanagement.modal.ImportCouponDetail;
 import com.vn.gasmanagement.modal.RegainShell;
 import com.vn.gasmanagement.modal.RegainShellDetail;
 import com.vn.gasmanagement.payload.request.DatePartition;
@@ -46,6 +49,8 @@ import com.vn.gasmanagement.reports.engine.ReportEngineFactory;
 import com.vn.gasmanagement.repository.BillDetailRepository;
 import com.vn.gasmanagement.repository.BillRepository;
 import com.vn.gasmanagement.repository.GasRepository;
+import com.vn.gasmanagement.repository.ImportCouponDetailRepository;
+import com.vn.gasmanagement.repository.ImportCouponRepository;
 import com.vn.gasmanagement.service.InvoiceService;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -73,6 +78,12 @@ public class InvoiceServiceImpl implements InvoiceService {
   @Autowired
   GasRepository gasRepository;
 
+  @Autowired
+  ImportCouponRepository importCouponRepository;
+
+  @Autowired
+  ImportCouponDetailRepository importCouponDetailRepository;
+
   @Override
   public BaseResponse createInvoice(InvoiceRequest request) {
     List<BillDetail> billDetails = new ArrayList<>();
@@ -87,7 +98,7 @@ public class InvoiceServiceImpl implements InvoiceService {
       bill.setNote(request.getNote());
       billRepository.save(bill);
 
-      if(request.getB12() != 0) {
+      if (request.getB12() != 0) {
         BillDetail b12 = new BillDetail();
         b12.setAmount(request.getB12());
         b12.setGasId(4);
@@ -129,18 +140,18 @@ public class InvoiceServiceImpl implements InvoiceService {
       }
 
       int totalAmount = request.getB12() + request.getB45() + request.getElf6kg()
-                        + request.getElf12kg() + request.getElf39kg();
+          + request.getElf12kg() + request.getElf39kg();
       bill.setTotalAmount(totalAmount);
       Long unitPriceB12 = gasRepository.findById(4).get().getUnitPriceOut();
       Long unitPriceB45 = gasRepository.findById(5).get().getUnitPriceOut();
       Long unitPriceElf6 = gasRepository.findById(1).get().getUnitPriceOut();
       Long unitPriceElf12 = gasRepository.findById(2).get().getUnitPriceOut();
       Long unitPriceElf39 = gasRepository.findById(3).get().getUnitPriceOut();
-      Long totalMoney = request.getB12()*unitPriceB12
-                        + request.getB45()*unitPriceB45
-                        + request.getElf6kg()*unitPriceElf6
-                        + request.getElf12kg()*unitPriceElf12
-                        + request.getElf39kg()*unitPriceElf39;
+      Long totalMoney = request.getB12() * unitPriceB12
+          + request.getB45() * unitPriceB45
+          + request.getElf6kg() * unitPriceElf6
+          + request.getElf12kg() * unitPriceElf12
+          + request.getElf39kg() * unitPriceElf39;
       bill.setTotalMoney(totalMoney);
       billRepository.save(bill);
 
@@ -151,8 +162,7 @@ public class InvoiceServiceImpl implements InvoiceService {
       invoiceDTO.setRegainShellDetails(regainShellDetails);
 
       return new BaseResponse(1, "Tạo hóa đơn thành công.", invoiceDTO);
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       logger.error(ex.getMessage(), ex);
       return new BaseResponse(0, "Tạo hóa đơn thất bại.", null);
     }
@@ -162,7 +172,7 @@ public class InvoiceServiceImpl implements InvoiceService {
   public void exportInvoice(InvoiceDTO invoiceDTO, HttpServletResponse response) {
     try {
       final ReportEngine report = ReportEngineFactory.createInstance(PDF_FILE_TYPE);
-      if (report == null){
+      if (report == null) {
         return;
       }
       final List<Map<String, String>> list = new ArrayList<>();
@@ -197,8 +207,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
       list.add(row);
       report.render(INVOICE_TEMPLATE_FILE, parameters, list, response);
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       logger.error(ex.getMessage());
     }
   }
@@ -235,8 +244,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 break;
               case 5:
                 response.setB45(billDetail.getAmount());
-                default:
-                  break;
+              default:
+                break;
             }
           }
         }
@@ -246,8 +255,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
       return new BaseResponse(0,
           "Lấy danh sách hóa đơn của khách hàng thành công.", invoiceResponseList);
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       logger.error(ex.getMessage(), ex);
       return new BaseResponse(0, "Lấy danh sách hóa đơn của khách hàng thất bại.", null);
     }
@@ -258,8 +266,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     try {
 
       return new BaseResponse(1, "Lấy danh sách hóa đơn thành công.", null);
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       logger.error(ex.getMessage(), ex);
       return new BaseResponse(0, "Lấy danh sách hóa đơn thất bại.", null);
     }
@@ -296,31 +303,64 @@ public class InvoiceServiceImpl implements InvoiceService {
             case 5:
               invoiceResponse.setB45(billDetail.getAmount());
               break;
-              default:
-                break;
+            default:
+              break;
           }
 
         }
 
         responseList.add(invoiceResponse);
       }
-      return new BaseResponse(1,"Lấy tất cả hóa đơn thành công.", responseList);
-    }
-    catch (Exception ex) {
+      return new BaseResponse(1, "Lấy tất cả hóa đơn thành công.", responseList);
+    } catch (Exception ex) {
       logger.error(ex.getMessage(), ex);
-      return new BaseResponse(0,"Lấy tất cả hóa đơn thất bại.", null);
+      return new BaseResponse(0, "Lấy tất cả hóa đơn thất bại.", null);
     }
   }
 
   @Override
   public BaseResponse handleDataInOut(String dateFrom, String dateTo) throws SQLException {
     try {
+      BalanceSheetDTO balanceSheetDTO = new BalanceSheetDTO();
+      List<Bill> billList = billRepository.findAllByPartition(dateFrom, dateTo);
+      List<ImportCoupon> importCouponList = importCouponRepository
+          .findAllByDatePartition(dateFrom, dateTo);
+      balanceSheetDTO.setTotalSheetIn(importCouponList.size());
+      balanceSheetDTO.setTotalSheetOut(billList.size());
+      Long totalMoneyIn = 0L;
+      Integer totalShellOut = 0;
+      for (Bill bill : billList) {
+        totalMoneyIn += bill.getTotalMoney();
+        totalShellOut += bill.getTotalAmount();
+//        List<BillDetail> billDetailList = billDetailRepository.findAllByBillId(bill.getId());
+      }
+      balanceSheetDTO.setTotalMoneyIn(totalMoneyIn);
+      balanceSheetDTO.setTotalShellOut(totalShellOut);
 
-      return new BaseResponse(1,"Lấy thông tin thu chi thành công từ server.", null);
-    }
-    catch (Exception ex) {
+      Long totalMoneyOut = 0L;
+      Integer totalShellIn = 0;
+      for (ImportCoupon importCoupon : importCouponList) {
+        totalMoneyOut += importCoupon.getTotalMoney();
+        totalShellIn += importCoupon.getTotalAmount();
+//        List<ImportCouponDetail> importCouponDetailList = importCouponDetailRepository
+//            .findAllByIdImportCoupon(importCoupon.getId());
+      }
+      balanceSheetDTO.setTotalMoneyOut(totalMoneyOut);
+      balanceSheetDTO.setTotalShellIn(totalShellIn);
+
+      if (totalMoneyIn > totalMoneyOut) {
+        balanceSheetDTO.setIncome(totalMoneyIn - totalMoneyOut);
+        balanceSheetDTO.setMoneyLost(0L);
+      }
+      else {
+        balanceSheetDTO.setIncome(0L);
+        balanceSheetDTO.setMoneyLost(totalMoneyOut - totalMoneyIn);
+      }
+
+      return new BaseResponse(1, "Lấy thông tin thu chi thành công từ server.", balanceSheetDTO);
+    } catch (Exception ex) {
       logger.error(ex.getMessage(), ex);
-      return new BaseResponse(0,"Lấy thông tin thu chi thất bại từ server.", null);
+      return new BaseResponse(0, "Lấy thông tin thu chi thất bại từ server.", null);
     }
   }
 }

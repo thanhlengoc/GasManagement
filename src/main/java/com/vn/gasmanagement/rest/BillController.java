@@ -1,5 +1,6 @@
 package com.vn.gasmanagement.rest;
 
+import com.vn.gasmanagement.dto.InvoiceDTO;
 import com.vn.gasmanagement.payload.request.InvoiceRequest;
 import com.vn.gasmanagement.service.impl.InvoiceServiceImpl;
 import java.sql.SQLException;
@@ -22,8 +23,8 @@ public class BillController {
   InvoiceServiceImpl invoiceService;
 
   @GetMapping(value = "/export-invoice")
-  public void exportInvoice(@RequestParam String param, HttpServletResponse response) {
-    invoiceService.exportInvoice(param, response);
+  public void exportInvoice(InvoiceDTO invoiceDTO, HttpServletResponse response) {
+    invoiceService.exportInvoice(invoiceDTO, response);
   }
 
   @PostMapping(value = "/create-invoice")
