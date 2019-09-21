@@ -19,7 +19,7 @@ import 'react-dates/initialize'
 import moment from 'moment';
 import DatePicker from "react-datepicker";
 import '../../../scss/_custom.scss';
-import {getAllGasType, saveGasType} from "../../api/gasType";
+import {deleteGas, getAllGasType, saveGasType} from "../../api/gasType";
 import TableExistEnd from "./TableExistEnd";
 import TableOutWarehouse from "./TableOutWarehouse";
 import TableInWarehouse from "./TableInWarehouse";
@@ -29,10 +29,11 @@ import {
   getListDataOutWarehouse
 } from "../../api/warehouseApi";
 import {toast} from "react-toastify";
-import NumberFormat from "react-number-format";
+import Loading from "../../components/Loading";
 
-let month = moment().format("DD/MM/YYYY");
+let month = moment().add(1, 'days').format("DD/MM/YYYY");
 let lastMonth = moment().startOf('month').format("DD/MM/YYYY");
+let currentDay = moment().format("DD/MM/YYYY");
 
 class WarehouseManagement extends Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class WarehouseManagement extends Component {
       startDate: null,
       endDate: null,
       modal: false,
-      dateInWarehouse: null,
+      dateInWarehouse: new Date(),
 
       tableInWarehouse: [],
       tableOutWarehouse: [],
@@ -69,11 +70,20 @@ class WarehouseManagement extends Component {
       elf39kg: 0,
       b12: 0,
       b45: 0,
+      other: "",
+      valve: 0,
+      stove: 0,
+      torch: 0,
+      priceValve: 0,
+      priceStove: 0,
+      priceTorch: 0,
       payShellElf6kg: 0,
       payShellElf12kg: 0,
       payShellElf39kg: 0,
       payShellB12: 0,
-      payShellB45:0
+      payShellB45:0,
+      note: "",
+      loading: false
     };
 
     this.toggleTab = this.toggleTab.bind(this);
@@ -130,30 +140,57 @@ class WarehouseManagement extends Component {
   }
 
   handleSaveGasType = () => {
+    this.setState({loading: true});
     const {code, gasName, weight, color, unitPrice} = this.state;
     const request = {
       code: code ? code : '',
       gasName: gasName ? gasName : '',
       weight: weight ? weight : 0,
       color: color ? color : '',
-      unitPrice: unitPrice ? unitPrice : 0
+      unitPriceIn: unitPrice ? unitPrice : 0
     };
-    saveGasType(request)
+    saveGasType(request).then(()=>this.setState({loading: false}))
+  };
+
+  handleDeleteGas = (id) => {
+    this.setState({loading: true});
+    if (id) {
+      deleteGas(id).then((res)=> {
+        if (res && parseInt(res.data.returnCode) === 1) {
+          toast.success(res.data.returnMessage)
+        }
+        else {
+          toast.error(res.data.returnMessage)
+        }
+      }).finally(()=>this.setState({loading:false}))
+    }
+    else {
+      toast.warn("Không tìm thấy loại gas này.");
+      this.setState({loading: false})
+    }
   };
 
   handleCreateNewBallot = () => {
-    const {elf6kg, elf12kg, elf39kg, b12, b45, payShellElf6kg, payShellElf12kg,
-      payShellElf39kg, payShellB12, payShellB45,oil, sugar, glass, payment} = this.state;
+    this.setState({loading: true});
+    const {elf6kg, elf12kg, elf39kg, b12, b45, payShellElf6kg, payShellElf12kg, other, note,
+      payShellElf39kg, payShellB12, payShellB45,oil, sugar, glass, payment, dateInWarehouse, valve,
+      stove, torch, priceValve, priceStove, priceTorch} = this.state;
+    const {fullName} = this.props;
     const request = {
-      dateIn: month,
-      personIn: "Le Ngoc Tuong",
+      dateIn: moment(dateInWarehouse).format("DD/MM/YYYY HH:mm:ss"),
+      personIn: fullName ? fullName : "",
       elf6kg: elf6kg,
       elf12kg: elf12kg,
       elf39kg: elf39kg,
       b12: b12,
       b45: b45,
-      other: "bep",
-      unit: "Binh",
+      other: other,
+      valve: valve,
+      stove: stove,
+      torch: torch,
+      priceValve: priceValve,
+      priceStove: priceStove,
+      priceTorch: priceTorch,
       payShellElf6kg: payShellElf6kg,
       payShellElf12kg: payShellElf12kg,
       payShellElf39kg: payShellElf39kg,
@@ -163,7 +200,7 @@ class WarehouseManagement extends Component {
       sugar: sugar,
       glass: glass,
       payment: payment,
-      note: "test"
+      note: note
     };
 
     createNewBallot(request).then(res => {
@@ -185,53 +222,44 @@ class WarehouseManagement extends Component {
     }).catch(err => {
       console.log(err);
       toast.error("Không có phản hồi từ server.")
+    }).finally(()=>{
+      this.setState({loading: false})
     })
   };
 
   handleSearchData = () => {
     const {startDate, endDate} = this.state;
+    this.setState({
+      loading: true
+    });
     const request = {
-      dateFrom: startDate ? startDate : lastMonth,
-      dateTo: endDate ? endDate : month
+      dateFrom: startDate ? moment(startDate).format("DD/MM/YYYY") : lastMonth,
+      dateTo: endDate ? moment(endDate).add(1, 'days').format("DD/MM/YYYY") : month
     };
-    getListDataInWarehouse(request).then(res => {
+    let inWarehouse = getListDataInWarehouse(request);
+    let outWarehouse = getListDataOutWarehouse(request);
+    let existEnd = getListDataExistEnd(request);
+
+    Promise.all([inWarehouse, outWarehouse, existEnd]).then(res => {
       if (res) {
+        let dataInWarehouse = res[0].data.result;
+        let dataOutWarehouse = res[1].data.result;
+        let dataExistEnd = res[2].data.result;
+
         this.setState({
-          tableInWarehouse: res.data.result
+          tableInWarehouse: dataInWarehouse,
+          tableOutWarehouse: dataOutWarehouse,
+          tableExistEnd: dataExistEnd
         })
       }
       else {
         toast.warn("Không có dữ liệu trả về.")
       }
-    }).catch(err =>{
+    }).catch(err => {
       console.log(err);
       toast.error("Không có phản hồi. Vui lòng thử lại.")
-    });
-    getListDataOutWarehouse(request).then(res => {
-      if (res) {
-        this.setState({
-          tableOutWarehouse: res.data.result
-        })
-      }
-      else {
-        toast.warn("Không có dữ liệu trả về.")
-      }
-    }).catch(err =>{
-      console.log(err);
-      toast.error("Không có phản hồi. Vui lòng thử lại.")
-    });
-    getListDataExistEnd(request).then(res => {
-      if (res) {
-        this.setState({
-          tableExistEnd: res.data.result
-        })
-      }
-      else {
-        toast.warn("Không có dữ liệu trả về.")
-      }
-    }).catch(err =>{
-      console.log(err);
-      toast.error("Không có phản hồi. Vui lòng thử lại.")
+    }).finally(()=>{
+      this.setState({loading: false})
     });
   };
 
@@ -240,6 +268,9 @@ class WarehouseManagement extends Component {
 
     return (
         <div className="animated fadeIn parent-padding">
+          {
+            this.state.loading ? <Loading/> : null
+          }
           <Row>
             <Col xs={12} sm={12}>
               <Card>
@@ -326,20 +357,257 @@ class WarehouseManagement extends Component {
                                 onClick={() => this.toggleModal()}>
                           <i className="fa fa-plus"/> Thêm mới
                         </Button>
-                        <TableInWarehouse/>
+                        <TableInWarehouse tableInWarehouse={this.state.tableInWarehouse}/>
+                      </Col>
+                    </Row>
+                    <h4>Tổng nhập mỗi loại</h4>
+                    <Row>
+                      <Col sm={3}>
+                        <Label htmlFor="text-input">Elf 6:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Elf 12:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Elf 39:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">B12:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">B45:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Total12:</Label>
+                        <Input type="number" readOnly
+                               value={0}
+                        />
+                      </Col>
+                      <Col sm={3}>
+                        <Label htmlFor="text-input">Van:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Bếp GĐ:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Bếp khò:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                      </Col>
+                      <Col sm={3}>
+                        <Label htmlFor="text-input">Dầu:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Đường:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Ly:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                      </Col>
+                      <Col sm={3}>
+                        <Label htmlFor="text-input">Công nợ tiền:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Công nợ B12:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Công nợ B45:</Label>
+                        <Input type="number" readOnly
+                               value={0}
+                        />
                       </Col>
                     </Row>
                     <hr/>
                     <Badge color="secondary" style={{marginBottom: '5px'}}>
                       <h4>Xuất bán</h4>
                     </Badge>
-                    <TableOutWarehouse/>
+                    <TableOutWarehouse tableOutWarehouse={this.state.tableOutWarehouse}/>
+                    <h4>Tổng xuất bán mỗi loại</h4>
+                    <Row>
+                      <Col xs={3}>
+                        <Label htmlFor="text-input">Elf 6:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Elf 12:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Elf 39:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">B12:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">B45:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Total12:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                      </Col>
+                      <Col xs={3}>
+                        <Label htmlFor="text-input">Van:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Bếp GĐ:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Bếp khò:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                      </Col>
+                      <Col xs={3}>
+                        <Label htmlFor="text-input">Dầu:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Đường:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Ly:</Label>
+                        <Input type="number" readOnly
+                               value={0}
+                        />
+                      </Col>
+                      <Col xs={3}>
+                        <Label htmlFor="text-input">Khách hàng nợ tiền:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Khách hàng nợ B12:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Khách hàng nợ B45:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                      </Col>
+                    </Row>
                     <hr/>
                     <Badge color="secondary" style={{marginBottom: '5px'}}>
                       <h4>Tồn cuối</h4>
                     </Badge>
-                    <TableExistEnd/>
+                    <TableExistEnd tableExistEnd={this.state.tableExistEnd}/>
+                    <h4>Tổng tồn cuối mỗi loại</h4>
+                    <Row>
+                      <Col sm={4}>
+                        <Label htmlFor="text-input">Elf 6:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Elf 12:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Elf 39:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">B12:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">B45:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Total12:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                      </Col>
+                      <Col sm={4}>
+                        <Label htmlFor="text-input">Van:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Bếp GĐ:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Bếp khò:</Label>
+                        <Input type="number" readOnly
+                               value={0}
+                        />
+                      </Col>
+                      <Col sm={4}>
+                        <Label htmlFor="text-input">Dầu:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Đường:</Label>
+                        <Input type="number" readOnly
+                               style={{marginBottom:'10px'}}
+                               value={0}
+                        />
+                        <Label htmlFor="text-input">Ly:</Label>
+                        <Input type="number" readOnly
+                               value={0}
+                        />
+                      </Col>
+                    </Row>
                   </TabPane>
+
                   <TabPane tabId='2'>
                     <Row style={{marginBottom: '20px'}}>
                       <Col xs="12" sm="12">
@@ -368,7 +636,7 @@ class WarehouseManagement extends Component {
                           <Col xs="12" sm="4">
                             <FormGroup>
                               <Label htmlFor="text-input">Cân nặng</Label>
-                              <Input type="text" id="text-input"
+                              <Input type="number"
                                      placeholder="Cân nặng"
                                      value={this.state.weight}
                                      onChange={(e) => this.setState(
@@ -389,12 +657,12 @@ class WarehouseManagement extends Component {
                           </Col>
                           <Col xs="12" sm="4">
                             <FormGroup>
-                              <Label htmlFor="text-input">Đơn giá</Label>
-                              <Input type="text" id="text-input"
-                                     placeholder="Đơn giá"
+                              <Label htmlFor="text-input">Đơn giá Nhập</Label>
+                              <Input type={"number"}
                                      value={this.state.unitPrice}
                                      onChange={(e) => this.setState(
-                                         {unitPrice: e.target.value})}/>
+                                         {unitPrice: e.target.value})}
+                              />
                             </FormGroup>
                           </Col>
                         </Row>
@@ -402,7 +670,7 @@ class WarehouseManagement extends Component {
                                 onClick={() => this.handleSaveGasType()}
                                 style={{marginBottom: '20px'}}>
                           <i className="fa fa-plus"/> Thêm Loại Gas</Button>
-                        <TableReactstrap responsive striped>
+                        <TableReactstrap responsive striped bordered className="table-header">
                           <thead>
                           <tr>
                             <th>TT</th>
@@ -412,6 +680,7 @@ class WarehouseManagement extends Component {
                             <th>Màu sắc</th>
                             <th>Đơn giá nhập</th>
                             <th>Đơn giá bán</th>
+                            <th>Action</th>
                           </tr>
                           </thead>
                           <tbody>
@@ -427,6 +696,13 @@ class WarehouseManagement extends Component {
                                         <td>{item.color}</td>
                                         <td>{item.unitPriceIn}</td>
                                         <td>{item.unitPriceOut}</td>
+                                        <td>
+                                          <Button color={"danger"}
+                                                  onClick={()=>this.handleDeleteGas(item.id)}
+                                          >
+                                            Xóa
+                                          </Button>
+                                        </td>
                                       </tr>
                                   )
                                 })
@@ -446,6 +722,9 @@ class WarehouseManagement extends Component {
                  className={'modal-lg modal-lg-custom' + this.props.className}
                  style={{maxWidth: '80%'}}
           >
+            {
+              this.state.loading ? <Loading/> : null
+            }
             <ModalHeader toggle={this.toggleModal}
                          style={{textAlign: 'center'}}>
               <strong>Thêm phiếu nhập</strong>
@@ -458,10 +737,10 @@ class WarehouseManagement extends Component {
                   </Label>
                   <DatePicker
                       className="form-control"
-                      placeholderText={month}
-                      selected={this.state.startDatePurchase}
-                      onChange={() => this.onChangeDateInWarehouse()}
-                      dateFormat="DD/MM/YYYY"
+                      placeholderText={currentDay}
+                      selected={this.state.dateInWarehouse}
+                      onChange={this.onChangeDateInWarehouse}
+                      dateFormat="dd/MM/yyyy"
                   />
                 </FormGroup>
                 <FormGroup row>
@@ -476,16 +755,14 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>Elf 6kg: </strong>
                               </Label>
-                              <Input name="elf6kg" type="text" id="text-input"
-                                     placeholder="0"
+                              <Input name="elf6kg" type="number"
                                      onChange={this.handleChange}/>
                             </FormGroup>
                             <FormGroup row>
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>Elf 12kg:</strong>
                               </Label>
-                              <Input name="elf12kg" type="text" id="text-input"
-                                     placeholder="0"
+                              <Input name="elf12kg" type="number"
                                      onChange={this.handleChange}
                               />
                             </FormGroup>
@@ -493,8 +770,7 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>Elf 39kg:</strong>
                               </Label>
-                              <Input name="elf39kg" type="text" id="text-input"
-                                     placeholder="0"
+                              <Input name="elf39kg" type="number"
                                      onChange={this.handleChange}
                               />
                             </FormGroup>
@@ -502,8 +778,7 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>B12:</strong>
                               </Label>
-                              <Input name="b12" type="text" id="text-input"
-                                     placeholder="0"
+                              <Input name="b12" type="number"
                                      onChange={this.handleChange}
                               />
                             </FormGroup>
@@ -511,8 +786,7 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>B45:</strong>
                               </Label>
-                              <Input name="b45" type="text" id="text-input"
-                                     placeholder="0"
+                              <Input name="b45" type="number"
                                      onChange={this.handleChange}
                               />
                             </FormGroup>
@@ -524,7 +798,8 @@ class WarehouseManagement extends Component {
                   <Col md={4}>
                     <Button color="info" onClick={() => this.toggleTV()}
                             style={{marginBottom: '1rem'}}>Trả vỏ</Button>
-                    <Collapse isOpen={this.state.collapseTV}>
+                    <Collapse isOpen={this.state.collapseTV}
+                    >
                       <Card>
                         <CardBody>
                           <Col xs={12} sm={12}>
@@ -532,8 +807,7 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>Trả vỏ Elf 6kg: </strong>
                               </Label>
-                              <Input name="payShellElf6kg" type="text" id="text-input"
-                                     placeholder="0"
+                              <Input name="payShellElf6kg" type="number"
                                      onChange={this.handleChange}
                               />
                             </FormGroup>
@@ -541,8 +815,7 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>Trả vỏ Elf 12kg:</strong>
                               </Label>
-                              <Input name="payShellElf12kg" type="text" id="text-input"
-                                     placeholder="0"
+                              <Input name="payShellElf12kg" type="number"
                                      onChange={this.handleChange}
                               />
                             </FormGroup>
@@ -550,8 +823,7 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>Trả vỏ Elf 39kg:</strong>
                               </Label>
-                              <Input name="payShellElf39kg" type="text" id="text-input"
-                                     placeholder="0"
+                              <Input name="payShellElf39kg" type="number"
                                      onChange={this.handleChange}
                               />
                             </FormGroup>
@@ -559,8 +831,7 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>Trả vỏ B12:</strong>
                               </Label>
-                              <Input name="payShellB12" type="text" id="text-input"
-                                     placeholder="0"
+                              <Input name="payShellB12" type="number"
                                      onChange={this.handleChange}
                               />
                             </FormGroup>
@@ -568,8 +839,7 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>Trả vỏ B45:</strong>
                               </Label>
-                              <Input name="payShellB45" type="text" id="text-input"
-                                     placeholder="0"
+                              <Input name="payShellB45" type="number"
                                      onChange={this.handleChange}/>
                             </FormGroup>
                           </Col>
@@ -588,7 +858,7 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>Dầu: </strong>
                               </Label>
-                              <Input name="oil" type="text" id="text-input"
+                              <Input name="oil" type="number"
                                      placeholder="Số lượng dầu chai 500ml"
                                      onChange={this.handleChange}
                               />
@@ -597,7 +867,7 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>Đường:</strong>
                               </Label>
-                              <Input name="sugar" type="text" id="text-input"
+                              <Input name="sugar" type="number"
                                      placeholder="số lượng đường (kg)"
                                      onChange={this.handleChange}
                               />
@@ -606,7 +876,7 @@ class WarehouseManagement extends Component {
                               <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                                 <strong>Ly:</strong>
                               </Label>
-                              <Input name="glass" type="text" id="text-input"
+                              <Input name="glass" type="number"
                                      placeholder="Số lượng ly (cái)"
                                      onChange={this.handleChange}
                               />
@@ -618,16 +888,51 @@ class WarehouseManagement extends Component {
                   </Col>
                 </FormGroup>
                 <FormGroup row>
+                  <Col md={4}>
+                    <Label htmlFor="text-input">
+                      <strong>Van:</strong>
+                    </Label>
+                    <Input name="valve" type="number"
+                           placeholder="Số lượng"
+                           style={{marginBottom:'5px'}}
+                           onChange={this.handleChange}/>
+                    <Input name="priceValve" type="number"
+                           placeholder="Giá"
+                           onChange={this.handleChange}/>
+                  </Col>
+                  <Col md={4}>
+                    <Label htmlFor="text-input">
+                      <strong>Bếp Gia Đình:</strong>
+                    </Label>
+                    <Input name="stove" type="number"
+                           placeholder="Số lượng"
+                           style={{marginBottom:'5px'}}
+                           onChange={this.handleChange}/>
+                    <Input name="priceStove" type="number"
+                           placeholder="Giá"
+                           onChange={this.handleChange}/>
+                  </Col>
+                  <Col md={4}>
+                    <Label htmlFor="text-input">
+                      <strong>Bếp khò:</strong>
+                    </Label>
+                    <Input name="stove" type="number"
+                           placeholder="Số lượng"
+                           style={{marginBottom:'5px'}}
+                           onChange={this.handleChange}/>
+                    <Input name="priceTorch" type="number"
+                           placeholder="Giá"
+                           onChange={this.handleChange}/>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
                   <Col md={6}>
                     <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                       <strong>Trả tiền:</strong>
                     </Label>
-                    {/*<Input name="payment" type="text" id="text-input"*/}
-                    {/*       placeholder="Trả tiền"*/}
-                    {/*       onChange={this.handleChange}/>*/}
-                    <NumberFormat thousandSeparator={true} placeholder="Trả tiền"
-                                  name="payment"
-                                  onChange={this.handleChange}
+                    <Input type={"number"} placeholder="Trả tiền"
+                           name="payment"
+                           onChange={this.handleChange}
                     />
                   </Col>
                 </FormGroup>
@@ -636,19 +941,8 @@ class WarehouseManagement extends Component {
                     <Label htmlFor="text-input" style={{marginRight: '10px'}}>
                       <strong>Thành tiền:</strong>
                     </Label>
-                    <Input name="totalMoney" type="text" id="text-input"
+                    <Input name="totalMoney" type="number"
                            placeholder="Thành tiền"
-                           onChange={this.handleChange}
-                           readOnly/>
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col md={6}>
-                    <Label htmlFor="text-input" style={{marginRight: '10px'}}>
-                      <strong>Tiền còn nợ:</strong>
-                    </Label>
-                    <Input name="payment" type="text" id="text-input"
-                           placeholder="Tiền còn nợ"
                            onChange={this.handleChange}
                            readOnly/>
                   </Col>

@@ -26,6 +26,7 @@ public class DateTimeUtils {
   public static final String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
   public static final String DATE_FORMAT = "dd/MM/yyyy";
   public static final String YYYYMMDDHHMMSSSSS = "yyyy-MM-dd HH:mm:ss.SSS";
+  public static final String YYYYMMDDHHMMSS = "yyyy-MM-dd HH:mm:ss";
 
   public static String formatDateToString(Date date) {
     if (date == null) {

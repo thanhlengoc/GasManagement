@@ -7,7 +7,7 @@ export default {
     },
     {
       title: true,
-      name: 'QL Nhân Viên',
+      name: 'Quản Lý',
       wrapper: {            // optional wrapper object
         element: '',        // required valid HTML5 element tag
         attributes: {}        // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
@@ -17,58 +17,22 @@ export default {
     {
       name: 'Nhân viên',
       url: '/staff',
-      icon: 'fa fa-circle text-success',
-    },
-    {
-      divider: true,
-    },
-    {
-      title: true,
-      name: 'QL Khách Hàng',
-      wrapper: {
-        element: '',
-        attributes: {}
-      },
-      class: ''
+      icon: 'icon-pencil',
     },
     {
       name: 'Khách hàng',
       url: '/customer',
-      icon: 'fa fa-circle text-success',
-    },
-    {
-      divider: true,
-    },
-    {
-      title: true,
-      name: 'QL Kho Hàng',
-      wrapper: {
-        element: '',
-        attributes: {}
-      },
-      class: ''
+      icon: 'icon-pencil',
     },
     {
       name: 'Nhập xuất kho',
       url: '/warehouse',
-      icon: 'fa fa-circle text-success',
-    },
-    {
-      divider: true,
-    },
-    {
-      title: true,
-      name: 'QL Thu/Chi',
-      wrapper: {
-        element: '',
-        attributes: {}
-      },
-      class: ''
+      icon: 'icon-pencil',
     },
     {
       name: 'Thu/chi',
-      url: '/bill/invoice',
-      icon: 'fa fa-circle text-success',
+      url: '/money-management',
+      icon: 'icon-pencil',
     },
     {
       divider: true,

@@ -18,38 +18,9 @@ const currMonth = currDate.getMonth();
 
 const events = [
   {
-    title: 'All Day Event very long title',
-    allDay: true,
-    start: new Date(currYear, currMonth, 0),
-    end: new Date(currYear, currMonth, 1)
-  },
-  {
-    title: 'DTS STARTS',
-    start: new Date(currYear+1, 2, 13, 0, 0, 0),
-    end: new Date(currYear+1, 2, 20, 0, 0, 0)
-  },
-
-  {
-    title: 'DTS ENDS',
-    start: new Date(currYear+1, 10, 6, 0, 0, 0),
-    end: new Date(currYear+1, 10, 13, 0, 0, 0)
-  },
-
-  {
-    title: 'Some Event',
-    start: new Date(currYear, currMonth, 9, 0, 0, 0),
-    end: new Date(currYear, currMonth, 9, 0, 0, 0)
-  },
-  {
-    title: 'Meeting',
-    start: new Date(currYear, currMonth, 12, 10, 30, 0, 0),
-    end: new Date(currYear, currMonth, 12, 12, 30, 0, 0),
-    desc: 'Pre-meeting meeting, to prepare for the meeting'
-  },
-  {
     title: 'Today',
-    start: new Date(currYear, currMonth, 13, 7, 0, 0),
-    end: new Date(currYear, currMonth, 13, 10, 30, 0)
+    start: new Date(),
+    end: new Date()
   },
 ];
 

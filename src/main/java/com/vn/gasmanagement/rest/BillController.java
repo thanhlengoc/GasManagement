@@ -23,8 +23,8 @@ public class BillController {
   InvoiceServiceImpl invoiceService;
 
   @GetMapping(value = "/export-invoice")
-  public void exportInvoice(InvoiceDTO invoiceDTO, HttpServletResponse response) {
-    invoiceService.exportInvoice(invoiceDTO, response);
+  public void exportInvoice(@RequestParam Long billId, HttpServletResponse response) {
+    invoiceService.exportInvoice(billId, response);
   }
 
   @PostMapping(value = "/create-invoice")
@@ -32,7 +32,7 @@ public class BillController {
     return new ResponseEntity<>(invoiceService.createInvoice(request), HttpStatus.OK);
   }
 
-  @GetMapping(value = "/list-invoice")
+  @GetMapping(value = "/list-invoice-customer")
   public ResponseEntity<?> getListInvoice(@RequestParam int customerId) {
     return new ResponseEntity<>(invoiceService.getListInvoiceCustomer(customerId), HttpStatus.OK);
   }

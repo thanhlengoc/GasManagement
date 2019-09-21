@@ -22,6 +22,37 @@ public class StringUtils {
     return userName.toLowerCase() + "@vng.com.vn";
   }
 
+  public static Integer formatStringToInt(String values) {
+    if (values.length() > 3) {
+      char comma = ',';
+      int count = 0;
+      for (int i = 0; i< values.length(); i++) {
+        if (values.charAt(i) == comma) {
+          count++;
+        }
+      }
+      int result = 0;
+      String last = values.substring(values.length() - 3);
+      switch (count) {
+        case 1:
+          String beforeComma = values.substring(0, values.indexOf(','));
+          result = Integer.parseInt(beforeComma.concat(last));
+          break;
+        case 2:
+          String one = values.substring(0, values.indexOf(','));
+          String two = values.substring(values.indexOf(',')+1, values.lastIndexOf(','));
+          result = Integer.parseInt(one.concat(two.concat(last)));
+          break;
+        default:
+          break;
+      }
+
+      return result;
+    }
+
+    return Integer.parseInt(values);
+  }
+
   public static String removeTabAndNewLine(String str) {
     if (str != null) {
       return str.trim().replaceAll("\r", "").replaceAll("\n", " ").replaceAll("\t", " ");

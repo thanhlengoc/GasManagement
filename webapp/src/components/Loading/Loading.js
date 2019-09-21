@@ -1,18 +1,14 @@
-import React, {Component} from 'react';
-import 'spinkit/css/spinkit.css';
+import React from 'react';
+import ReactLoading from 'react-loading';
 
-class Loading extends Component {
-    render() {
-        return (
-            <div className="sk-wave" style={{position:'absolute', left:'50%'}}>
-                  <div className="sk-rect sk-rect1"></div>&nbsp;
-                  <div className="sk-rect sk-rect2"></div>&nbsp;
-                  <div className="sk-rect sk-rect3"></div>&nbsp;
-                  <div className="sk-rect sk-rect4"></div>&nbsp;
-                  <div className="sk-rect sk-rect5"></div>
-                </div>
-        )
-    }
+class Loading extends React.Component{
+  render() {
+    return (
+        <div style={{position: 'absolute', left: '50%', top: '50%',zIndex:'9999'}}>
+          <ReactLoading type="spokes" color="#827717" height={80} width={80} />
+        </div>
+    );
+  }
 }
 
 export default Loading;

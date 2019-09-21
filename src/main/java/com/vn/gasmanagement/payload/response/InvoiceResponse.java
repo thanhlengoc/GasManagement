@@ -2,9 +2,9 @@ package com.vn.gasmanagement.payload.response;
 
 public class InvoiceResponse {
 
-  private Long InvoiceCode;
+  private Long invoiceCode;
   private String dateOut;
-  private int userSale;
+  private String userSale;
   private int customerPurchase;
   private Float discount;
   private int elf6kg;
@@ -12,13 +12,17 @@ public class InvoiceResponse {
   private int elf39kg;
   private int b12;
   private int b45;
+  private int total12;
   private String other;
-  private String unit;
+  private int valve;
+  private int stove;
+  private int torch;
   private String regainElf6kg;
   private String regainElf12kg;
   private String regainElf39kg;
   private String regainB12;
   private String regainB45;
+  private String regainTotal12;
   private int oil;
   private int sugar;
   private int glass;
@@ -31,15 +35,12 @@ public class InvoiceResponse {
   private int debtElf39kgCus;
   private int debtB12Cus;
   private int debtB45Cus;
+  private int debtTotal12;
   private String note;
 
-  public Long getInvoiceCode() {
-    return InvoiceCode;
-  }
+  public Long getInvoiceCode() { return invoiceCode; }
 
-  public void setInvoiceCode(Long invoiceCode) {
-    InvoiceCode = invoiceCode;
-  }
+  public void setInvoiceCode(Long invoiceCode) { this.invoiceCode = invoiceCode; }
 
   public String getDateOut() {
     return dateOut;
@@ -49,11 +50,11 @@ public class InvoiceResponse {
     this.dateOut = dateOut;
   }
 
-  public int getUserSale() {
+  public String getUserSale() {
     return userSale;
   }
 
-  public void setUserSale(int userSale) {
+  public void setUserSale(String userSale) {
     this.userSale = userSale;
   }
 
@@ -119,14 +120,6 @@ public class InvoiceResponse {
 
   public void setOther(String other) {
     this.other = other;
-  }
-
-  public String getUnit() {
-    return unit;
-  }
-
-  public void setUnit(String unit) {
-    this.unit = unit;
   }
 
   public String getRegainElf6kg() {
@@ -271,5 +264,53 @@ public class InvoiceResponse {
 
   public void setTotalShell(int totalShell) {
     this.totalShell = totalShell;
+  }
+
+  public int getValve() {
+    return valve;
+  }
+
+  public void setValve(int valve) {
+    this.valve = valve;
+  }
+
+  public int getStove() {
+    return stove;
+  }
+
+  public void setStove(int stove) {
+    this.stove = stove;
+  }
+
+  public int getTorch() {
+    return torch;
+  }
+
+  public void setTorch(int torch) {
+    this.torch = torch;
+  }
+
+  public int getTotal12() {
+    return total12;
+  }
+
+  public void setTotal12(int total12) {
+    this.total12 = total12;
+  }
+
+  public String getRegainTotal12() {
+    return regainTotal12;
+  }
+
+  public void setRegainTotal12(String regainTotal12) {
+    this.regainTotal12 = regainTotal12;
+  }
+
+  public int getDebtTotal12() {
+    return debtTotal12;
+  }
+
+  public void setDebtTotal12(int debtTotal12) {
+    this.debtTotal12 = debtTotal12;
   }
 }

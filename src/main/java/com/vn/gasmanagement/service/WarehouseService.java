@@ -5,7 +5,7 @@ import com.vn.gasmanagement.payload.response.BaseResponse;
 
 public interface WarehouseService {
 
-  BaseResponse inWarehouse(InWarehouseRequest request);
+  BaseResponse createNewBallot(InWarehouseRequest request);
 
   BaseResponse tableInWarehouse(String dateFrom, String dateTo);
   BaseResponse tableOutWarehouse(String dateFrom, String dateTo);

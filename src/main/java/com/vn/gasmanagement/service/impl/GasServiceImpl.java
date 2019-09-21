@@ -48,11 +48,22 @@ public class GasServiceImpl implements GasService {
   public BaseResponse getListGas() {
     try{
       List<Gas> listGas = gasRepository.findAll();
-      return new BaseResponse(1,"Get all gas success.", listGas);
+      return new BaseResponse<>(1,"Get all gas success.", listGas);
     }
     catch (Exception ex){
       logger.error("Exception when get all gas type.");
-      return new BaseResponse(0, "Get all gas fail.", null);
+      return new BaseResponse<>(0, "Get all gas fail.", null);
+    }
+  }
+
+  @Override
+  public BaseResponse deleteGasType(int id) {
+    try {
+      gasRepository.deleteById(id);
+      return new BaseResponse<>(1, "Xóa thành công.", null);
+    }
+    catch (Exception ex) {
+      return new BaseResponse<>(0, "Xóa thất bại.", null);
     }
   }
 }

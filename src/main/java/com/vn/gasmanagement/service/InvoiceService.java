@@ -11,7 +11,7 @@ public interface InvoiceService {
 
   BaseResponse createInvoice(InvoiceRequest request);
 
-  void exportInvoice(InvoiceDTO invoiceDTO, HttpServletResponse response);
+  void exportInvoice(Long billId, HttpServletResponse response);
 
   BaseResponse getListInvoiceCustomer(int customerId);
 

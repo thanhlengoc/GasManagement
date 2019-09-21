@@ -23,7 +23,11 @@ public class BillDetail {
 
   private int amount;
 
-  private Long unitPrice;
+  private Integer unitPrice;
+
+  private int shellRegain;
+
+  private int existEnd;
 
   public Long getId() { return id; }
 
@@ -41,7 +45,19 @@ public class BillDetail {
 
   public void setAmount(int amount) { this.amount = amount; }
 
-  public Long getUnitPrice() { return unitPrice; }
+  public Integer getUnitPrice() { return unitPrice; }
 
-  public void setUnitPrice(Long unitPrice) { this.unitPrice = unitPrice; }
+  public void setUnitPrice(Integer unitPrice) { this.unitPrice = unitPrice; }
+
+  public int getShellRegain() { return shellRegain; }
+
+  public void setShellRegain(int shellRegain) { this.shellRegain = shellRegain; }
+
+  public int getExistEnd() {
+    return existEnd;
+  }
+
+  public void setExistEnd(int existEnd) {
+    this.existEnd = existEnd;
+  }
 }

@@ -10,7 +10,12 @@ public class InWarehouseRequest {
   private int b12;
   private int b45;
   private String other;
-  private String unit;
+  private int valve;
+  private int stove;
+  private int torch;
+  private int priceValve;
+  private int priceStove;
+  private int priceTorch;
   private int payShellElf6kg;
   private int payShellElf12kg;
   private int payShellElf39kg;
@@ -19,13 +24,10 @@ public class InWarehouseRequest {
   private int oil;
   private int sugar;
   private int glass;
-  private Long payment;
-//  private int debtMoney;
-//  private int debtElf6kg;
-//  private int debtElf12kg;
-//  private int debtElf39kg;
-//  private int debtB12;
-//  private int debtB45;
+  private int priceOil;
+  private int priceSugar;
+  private int priceGlass;
+  private Integer payment;
   private String note;
 
   public String getDateIn() {
@@ -92,14 +94,6 @@ public class InWarehouseRequest {
     this.other = other;
   }
 
-  public String getUnit() {
-    return unit;
-  }
-
-  public void setUnit(String unit) {
-    this.unit = unit;
-  }
-
   public int getPayShellElf6kg() {
     return payShellElf6kg;
   }
@@ -164,61 +158,13 @@ public class InWarehouseRequest {
     this.glass = glass;
   }
 
-  public Long getPayment() {
+  public Integer getPayment() {
     return payment;
   }
 
-  public void setPayment(Long payment) {
+  public void setPayment(Integer payment) {
     this.payment = payment;
   }
-
-//  public int getDebtMoney() {
-//    return debtMoney;
-//  }
-//
-//  public void setDebtMoney(int debtMoney) {
-//    this.debtMoney = debtMoney;
-//  }
-//
-//  public int getDebtElf6kg() {
-//    return debtElf6kg;
-//  }
-//
-//  public void setDebtElf6kg(int debtElf6kg) {
-//    this.debtElf6kg = debtElf6kg;
-//  }
-//
-//  public int getDebtElf12kg() {
-//    return debtElf12kg;
-//  }
-//
-//  public void setDebtElf12kg(int debtElf12kg) {
-//    this.debtElf12kg = debtElf12kg;
-//  }
-//
-//  public int getDebtElf39kg() {
-//    return debtElf39kg;
-//  }
-//
-//  public void setDebtElf39kg(int debtElf39kg) {
-//    this.debtElf39kg = debtElf39kg;
-//  }
-//
-//  public int getDebtB12() {
-//    return debtB12;
-//  }
-//
-//  public void setDebtB12(int debtB12) {
-//    this.debtB12 = debtB12;
-//  }
-//
-//  public int getDebtB45() {
-//    return debtB45;
-//  }
-//
-//  public void setDebtB45(int debtB45) {
-//    this.debtB45 = debtB45;
-//  }
 
   public String getNote() {
     return note;
@@ -226,5 +172,77 @@ public class InWarehouseRequest {
 
   public void setNote(String note) {
     this.note = note;
+  }
+
+  public int getValve() {
+    return valve;
+  }
+
+  public void setValve(int valve) {
+    this.valve = valve;
+  }
+
+  public int getStove() {
+    return stove;
+  }
+
+  public void setStove(int stove) {
+    this.stove = stove;
+  }
+
+  public int getTorch() {
+    return torch;
+  }
+
+  public void setTorch(int torch) {
+    this.torch = torch;
+  }
+
+  public int getPriceValve() {
+    return priceValve;
+  }
+
+  public void setPriceValve(int priceValve) {
+    this.priceValve = priceValve;
+  }
+
+  public int getPriceStove() {
+    return priceStove;
+  }
+
+  public void setPriceStove(int priceStove) {
+    this.priceStove = priceStove;
+  }
+
+  public int getPriceTorch() {
+    return priceTorch;
+  }
+
+  public void setPriceTorch(int priceTorch) {
+    this.priceTorch = priceTorch;
+  }
+
+  public int getPriceOil() {
+    return priceOil;
+  }
+
+  public void setPriceOil(int priceOil) {
+    this.priceOil = priceOil;
+  }
+
+  public int getPriceSugar() {
+    return priceSugar;
+  }
+
+  public void setPriceSugar(int priceSugar) {
+    this.priceSugar = priceSugar;
+  }
+
+  public int getPriceGlass() {
+    return priceGlass;
+  }
+
+  public void setPriceGlass(int priceGlass) {
+    this.priceGlass = priceGlass;
   }
 }

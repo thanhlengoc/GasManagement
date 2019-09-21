@@ -26,6 +26,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import {createNewUser, getListUser, updateUserInfo} from "../../api/userApi";
 import {toast} from "react-toastify";
+import Loading from "../../components/Loading";
 
 let currentDate = moment().format('DD/MM/YYYY');
 
@@ -60,20 +61,19 @@ class StaffManagement extends Component {
 
       modalUpdate: false,
       activeTabModal: '1',
+
+      loading: false
     };
 
-    this.toggleCollapse = this.toggleCollapse.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.searchUser = this.searchUser.bind(this);
-    this.renderSearchResult = this.renderSearchResult.bind(this);
     this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
     this.handleChangeEndDate = this.handleChangeEndDate.bind(this);
     this.toggleTabModal = this.toggleTabModal.bind(this);
   }
 
-  toggleCollapse() {
+  toggleCollapse = () => {
     this.setState({collapse: !this.state.collapse});
-  }
+  };
 
   toggleModal = (item) => {
     if(item) {
@@ -122,6 +122,11 @@ class StaffManagement extends Component {
   };
 
   componentDidMount() {
+    this.handleGetListUser()
+  }
+
+  handleGetListUser = () => {
+    this.setState({loading: true});
     getListUser().then(res => {
       this.setState({
         listUsers: res.data.result
@@ -129,8 +134,8 @@ class StaffManagement extends Component {
     }).catch(err => {
       console.log(err);
       toast.error("Lấy danh sách nhân viên thất bại.")
-    })
-  }
+    }).finally(()=>this.setState({loading:false}))
+  };
 
   handleAddNewUser = () => {
     const {username, password, roleOption, fullName, phone, address, cmnd, startDateWork, note} = this.state;
@@ -162,7 +167,7 @@ class StaffManagement extends Component {
     })
   };
 
-  searchUser() {
+  searchUser = () => {
     const {listUsers, nameToSearch} = this.state;
     const checkCondition = (str, fullStr) => {
       return fullStr.includes(str)
@@ -173,7 +178,7 @@ class StaffManagement extends Component {
     this.setState({
       searchResult: userFiltered
     })
-  }
+  };
 
   handleUpdateUserInfo = () => {
     const {nameUpdate, phoneUpdate, addressUpdate, cmndUpdate,
@@ -203,33 +208,6 @@ class StaffManagement extends Component {
     })
   };
 
-  renderSearchResult() {
-    const {searchResult} = this.state;
-    return searchResult.map((item, i) => (
-        <tr key={i}>
-          <td>{i+1}</td>
-          <td>
-            <a className="btn btn-primary"
-               style={{width: "100px"}}
-               onClick={this.toggleModal}>{"NV000"+item.id}
-              <i className="fa fa-user-o"
-                 style={{paddingLeft: "7px"}}></i>
-            </a>
-          </td>
-          <td>{item.fullName}</td>
-          <td>{item.phoneNumber}</td>
-          <td>
-            <p style={{width:'150px'}}>{item.address}</p>
-          </td>
-          <td>{item.cmnd}</td>
-          <td>{item.startDateWork}</td>
-          <td>{item.endDateWork}</td>
-          <td>{item.role}</td>
-          <td>{item.note}</td>
-        </tr>
-    ))
-  }
-
   handleResetForm = () => {
     document.getElementById("form-create-user").reset();
   };
@@ -240,6 +218,9 @@ class StaffManagement extends Component {
 
     return (
         <div className="animated fadeIn parent-padding">
+          {
+            this.state.loading ? <Loading/> : null
+          }
           <Row>
             <Col>
               <Card>
@@ -248,7 +229,7 @@ class StaffManagement extends Component {
                   <div className="card-actions">
                     <Button className="btn btn-minimize"
                             data-target="#collapseExample"
-                            onClick={this.toggleCollapse}><i
+                            onClick={()=>this.toggleCollapse()}><i
                         className="icon-arrow-up"></i>
                     </Button>
                   </div>
@@ -273,7 +254,7 @@ class StaffManagement extends Component {
                     </Row>
                     <Row style={{marginBottom: '20px'}}>
                       <Col xs="12" sm="12">
-                        <Table responsive striped>
+                        <Table responsive striped bordered className="table-header">
                           <thead>
                           <tr>
                             <th className="text-center">STT</th>

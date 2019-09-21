@@ -1,0 +1,6 @@
+{
+    "name": "MoneyManagement",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./MoneyManagement.js"
+}

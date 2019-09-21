@@ -2,6 +2,7 @@ package com.vn.gasmanagement.dto;
 
 public class BalanceSheetDTO {
 
+  private int key;
   private String date;
   private int totalSheetIn;
   private int totalSheetOut;
@@ -9,11 +10,15 @@ public class BalanceSheetDTO {
   private int totalShellOut;
   private Long totalMoneyIn;
   private Long totalMoneyOut;
-  private Long income;
-  private Long moneyLost;
+  private int income;
+  private int moneyLost;
 
   public BalanceSheetDTO() {
   }
+
+  public int getKey() { return key; }
+
+  public void setKey(int key) { this.key = key; }
 
   public String getDate() { return date; }
 
@@ -59,13 +64,6 @@ public class BalanceSheetDTO {
     this.totalMoneyIn = totalMoneyIn;
   }
 
-  public Long getIncome() {
-    return income;
-  }
-
-  public void setIncome(Long income) {
-    this.income = income;
-  }
 
   public Long getTotalMoneyOut() {
     return totalMoneyOut;
@@ -75,7 +73,20 @@ public class BalanceSheetDTO {
     this.totalMoneyOut = totalMoneyOut;
   }
 
-  public Long getMoneyLost() { return moneyLost; }
 
-  public void setMoneyLost(Long moneyLost) { this.moneyLost = moneyLost; }
+  public int getIncome() {
+    return income;
+  }
+
+  public void setIncome(int income) {
+    this.income = income;
+  }
+
+  public int getMoneyLost() {
+    return moneyLost;
+  }
+
+  public void setMoneyLost(int moneyLost) {
+    this.moneyLost = moneyLost;
+  }
 }

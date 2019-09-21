@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.criteria.CriteriaBuilder.In;
 
 @Entity
 @Table(name = "Gas")
@@ -30,9 +31,9 @@ public class Gas {
   private String color;
 
   @Column(name = "unitPriceIn")
-  private Long unitPriceIn;
+  private Integer unitPriceIn;
 
-  private Long unitPriceOut;
+  private Integer unitPriceOut;
 
   private String gasTypeName;
 
@@ -66,13 +67,21 @@ public class Gas {
 
   public void setColor(String color) { this.color = color; }
 
-  public Long getUnitPriceIn() { return unitPriceIn; }
+  public Integer getUnitPriceIn() {
+    return unitPriceIn;
+  }
 
-  public void setUnitPriceIn(Long unitPriceIn) { this.unitPriceIn = unitPriceIn; }
+  public void setUnitPriceIn(Integer unitPriceIn) {
+    this.unitPriceIn = unitPriceIn;
+  }
 
-  public Long getUnitPriceOut() { return unitPriceOut; }
+  public Integer getUnitPriceOut() {
+    return unitPriceOut;
+  }
 
-  public void setUnitPriceOut(Long unitPriceOut) { this.unitPriceOut = unitPriceOut; }
+  public void setUnitPriceOut(Integer unitPriceOut) {
+    this.unitPriceOut = unitPriceOut;
+  }
 
   public String getGasTypeName() { return gasTypeName; }
 

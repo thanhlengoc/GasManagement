@@ -11,4 +11,6 @@ public interface GasService {
   BaseResponse saveGasType(GasRequest request);
 
   BaseResponse getListGas();
+
+  BaseResponse deleteGasType(int id);
 }

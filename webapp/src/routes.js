@@ -11,7 +11,7 @@ const routes = {
   '/warehouse': 'Quản lí nhập xuất kho hàng',
   '/warehouse/enter': 'Nhập kho',
   '/warehouse/export': 'Xuất kho',
-  '/bill/invoice': 'Lập hóa đơn',
+  '/money-management': 'Quản lý thu chi',
   '/bill/income-spend': 'Quản lí thu/chi',
 };
 export default routes;

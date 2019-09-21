@@ -2,11 +2,11 @@
 <!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoice" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
-	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times New Roman"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times New Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
 	<style name="Detail" mode="Transparent" fontName="Times New Roman"/>
-	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times New Roman">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
 			<style mode="Opaque" backcolor="#EEEFF0"/>
@@ -61,129 +61,279 @@
 		<![CDATA[]]>
 	</queryString>
 	<title>
-		<band height="178" splitType="Stretch">
+		<band height="215" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="105" width="84" height="25" uuid="57aed2b1-4f4e-40a3-a6ad-54dae8dd4c5a">
+				<reportElement x="0" y="170" width="70" height="25" uuid="57aed2b1-4f4e-40a3-a6ad-54dae8dd4c5a">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="16" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Bill to:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="130" width="120" height="15" uuid="33274f5d-5b7e-4be2-a2ff-65d452a618ed"/>
-				<text><![CDATA[ABC Company]]></text>
+				<text><![CDATA[TT]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="80" width="556" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
+				<reportElement x="0" y="160" width="556" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
 			<staticText>
-				<reportElement x="0" y="145" width="120" height="15" uuid="1d3045ed-03d6-4253-a959-aeeb491b73ca"/>
-				<text><![CDATA[Company Address]]></text>
+				<reportElement x="395" y="170" width="149" height="25" uuid="139ebe8d-25b0-411e-986c-270015400874">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Thành tiền]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="160" width="120" height="15" uuid="235bf8b6-1e1e-49c7-b59f-7a46c30b8209"/>
-				<text><![CDATA[Company state1]]></text>
+				<reportElement x="410" y="140" width="50" height="20" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="460" y="140" width="84" height="20" uuid="29961499-e57b-456a-96f4-7d6af9b6a1fe"/>
+				<textFieldExpression><![CDATA["new java.util.Date()"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="270" y="100" width="84" height="20" uuid="7025cf02-d6f6-4975-b3c6-80c5e0c726e8"/>
+				<text><![CDATA[ HD0001]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="410" y="163" width="120" height="15" uuid="b62092ec-9053-4f27-b387-9b25d2909a68"/>
-				<text><![CDATA[Ship state1]]></text>
+				<reportElement x="220" y="100" width="50" height="20" uuid="0b3f9342-da78-4cfa-9fc5-2301c4749678"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[HD Số:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="410" y="130" width="120" height="15" uuid="edbd74ac-0cbd-44c9-8a8e-ccf745191172"/>
-				<text><![CDATA[Ship name]]></text>
+				<reportElement x="100" y="30" width="415" height="15" uuid="c226e44d-3bb5-4145-b0b3-903bf1d79fde"/>
+				<text><![CDATA[233 Dương Vân Nga, Phường Vĩnh Hải, Thành phố Nha Trang, Tỉnh Khánh Hòa]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="410" y="105" width="84" height="25" uuid="139ebe8d-25b0-411e-986c-270015400874">
+				<reportElement x="220" y="50" width="125" height="15" uuid="b96f7183-44f8-43ad-ba60-43d8fbf50b6e"/>
+				<text><![CDATA[Hotline: 0987 323 789]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="140" width="80" height="20" uuid="e565c42f-74cc-4afc-bb6d-9718efacc12c"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Người bán: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="140" width="70" height="20" uuid="4b4ec829-25c3-4204-b84d-23ff2e0b3a22"/>
+				<text><![CDATA[NV0001]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="140" width="80" height="20" uuid="c6ae47bb-32c4-4d89-801f-3082c30be4e9"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Khách hàng:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="140" width="70" height="20" uuid="22bf3891-537a-4562-b58e-94dfa1e01969"/>
+				<text><![CDATA[KH0001]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="170" width="106" height="25" uuid="0f60c15e-c6f9-48b0-ac4c-4702eb839f22">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tên hàng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="176" y="170" width="104" height="25" uuid="bf951730-8d5b-46e5-a6ac-3acfb9f42cfd">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Số lượng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="170" width="115" height="25" uuid="6259b2ff-62a9-4018-bd31-87b1e4352e3b">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Đơn giá]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="195" width="70" height="20" uuid="33274f5d-5b7e-4be2-a2ff-65d452a618ed"/>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="195" width="106" height="20" uuid="1907f516-eccb-4080-8fc3-f140b5e26246"/>
+				<text><![CDATA[Elf 6KG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="176" y="195" width="104" height="20" uuid="845739c4-022f-46c0-97d6-461a41ff3cb1"/>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="195" width="115" height="20" uuid="ba5189f7-00c3-4a32-9a3d-cb44b9e07509"/>
+				<text><![CDATA[100,000]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="195" width="150" height="20" uuid="673bbd13-edcf-4b15-ba5d-64f677c48a21"/>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="75" width="186" height="25" uuid="98014698-5c08-43a0-9dd9-5b48f08f9ded">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Ship to:]]></text>
+				<text><![CDATA[HÓA ĐƠN BÁN HÀNG]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="410" y="148" width="120" height="15" uuid="2d2f365d-7b12-4a8f-990d-ff528a2660bc"/>
-				<text><![CDATA[Ship Address]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="415" y="10" width="50" height="20" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
-				<box rightPadding="4"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[Date:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="465" y="10" width="84" height="20" uuid="29961499-e57b-456a-96f4-7d6af9b6a1fe"/>
-				<textFieldExpression><![CDATA["new java.util.Date()"]]></textFieldExpression>
-			</textField>
-			<image hAlign="Center">
-				<reportElement x="0" y="0" width="65" height="60" uuid="94883631-a913-43e2-b182-ab8d77d0181e"/>
-				<imageExpression><![CDATA["invoice_logo.png"]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="465" y="30" width="84" height="20" uuid="7025cf02-d6f6-4975-b3c6-80c5e0c726e8"/>
-				<text><![CDATA[INV0001]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="415" y="30" width="50" height="20" uuid="0b3f9342-da78-4cfa-9fc5-2301c4749678"/>
-				<box rightPadding="4"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[Invoice]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="95" y="0" width="285" height="25" uuid="e622555d-198b-4ccd-a4a1-c59c53304058">
+				<reportElement x="185" y="0" width="207" height="25" uuid="3fb50b94-6673-4244-967e-eaac602488b5">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="19" isBold="true"/>
+					<font size="18" isBold="true"/>
 				</textElement>
 				<text><![CDATA[GAS HƯNG LỢI HƯNG]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="95" y="55" width="205" height="15" uuid="b8cc42fd-b569-497d-834d-7e854040ad18"/>
-				<text><![CDATA[0978012345]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="95" y="25" width="205" height="15" uuid="c226e44d-3bb5-4145-b0b3-903bf1d79fde"/>
-				<text><![CDATA[Nha Trang]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="95" y="40" width="205" height="15" uuid="b96f7183-44f8-43ad-ba60-43d8fbf50b6e"/>
-				<text><![CDATA[Khánh Hòa, 65000]]></text>
 			</staticText>
 		</band>
 	</title>
 	<columnHeader>
-		<band height="20"/>
-	</columnHeader>
-	<detail>
-		<band height="20"/>
-	</detail>
-	<lastPageFooter>
-		<band height="177">
+		<band height="160">
 			<staticText>
-				<reportElement positionType="Float" x="-1" y="30" width="261" height="101" uuid="1a0d7088-5af7-4865-8be1-41ec5f51fb36"/>
+				<reportElement x="0" y="0" width="70" height="20" uuid="274d1ba6-f988-450d-a606-ba461339c330"/>
+				<text><![CDATA[2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="70" height="20" uuid="26ca737c-ddba-44c7-914e-ce2834362777"/>
+				<text><![CDATA[3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="70" height="20" uuid="f7f3da14-cd2b-4510-b276-4b8ba35d1302"/>
+				<text><![CDATA[4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="70" height="20" uuid="be854c46-8919-48b0-8dda-9dbae5fb5a1f"/>
+				<text><![CDATA[5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="0" width="106" height="20" uuid="dc3a658a-b523-4014-b81f-07c3e3bc9175"/>
+				<text><![CDATA[Elf 12KG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="20" width="106" height="20" uuid="2bcd718d-028d-44b9-a3c7-914fd09e2613"/>
+				<text><![CDATA[Elf 39KG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="40" width="106" height="20" uuid="edf753e0-9de7-428b-9fda-e8ce0ab7f4bc"/>
+				<text><![CDATA[B12]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="60" width="106" height="20" uuid="e467929a-4e35-42e2-b088-65aab6003f87"/>
+				<text><![CDATA[B45]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="176" y="0" width="104" height="20" uuid="3279aedd-26e5-42ce-8bec-8edd08da77a0"/>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="176" y="20" width="104" height="20" uuid="6ffaa32a-cedf-4a37-8064-b22131f0e9d2"/>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="176" y="40" width="104" height="20" uuid="d472c92b-1ba9-4240-9e0b-8012602b268b"/>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="176" y="60" width="104" height="20" uuid="355bc0ff-430a-412e-a0aa-dc665d6a60a9"/>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="115" height="20" uuid="29d4271b-e0ac-4da4-b9c3-8728eafa6d16"/>
+				<text><![CDATA[120,000]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="20" width="115" height="20" uuid="74eacc6b-264c-4eae-a8a3-decfb59b94eb"/>
+				<text><![CDATA[140,000]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="40" width="115" height="20" uuid="6f6569cf-cc6b-4eb6-b124-fa6b97c971b9"/>
+				<text><![CDATA[160,000]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="60" width="115" height="20" uuid="b1069d2a-2639-4f3b-9be0-51ee5f5b3b3f"/>
+				<text><![CDATA[180,000]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="0" width="150" height="20" uuid="8c78fed9-00f9-445a-9f44-c496fea81126"/>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="20" width="150" height="20" uuid="86ce6962-fea3-40cf-bce5-331c23b2513a"/>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="40" width="150" height="20" uuid="2dd9112f-115a-4f92-a0ae-a363cdbf8eac"/>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="60" width="150" height="20" uuid="414e9d30-1f53-4e14-a472-24f4ff331cc3"/>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="100" width="106" height="20" uuid="b00fc3ff-6c61-45f0-aa80-67a07a3fe791"/>
+				<text><![CDATA[Thành tiền:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="120" width="106" height="20" uuid="b95f1487-ffdc-4153-90be-8631f911c4e8"/>
+				<text><![CDATA[Chiết khấu:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="140" width="106" height="20" uuid="7d0b95e4-0d5f-498d-9648-d14618359211"/>
+				<text><![CDATA[Tổng cộng:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="386" y="100" width="159" height="20" uuid="b8a48be3-8cd2-4f01-982a-fa6cbc4f1cb4"/>
+				<text><![CDATA[100,000]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="386" y="120" width="159" height="20" uuid="6f839ed4-ce58-4635-a906-cca5dcd11d91"/>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="386" y="140" width="159" height="20" uuid="4704891a-ec3c-450f-9cae-c0f3dad43819"/>
+				<text><![CDATA[1,000,000]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<lastPageFooter>
+		<band height="154">
+			<staticText>
+				<reportElement positionType="Float" x="381" y="20" width="176" height="71" uuid="1a0d7088-5af7-4865-8be1-41ec5f51fb36"/>
 				<box>
 					<topPen lineWidth="1.1" lineStyle="Dashed"/>
 					<leftPen lineWidth="1.1" lineStyle="Dashed"/>
 					<bottomPen lineWidth="1.1" lineStyle="Dashed"/>
 					<rightPen lineWidth="1.1" lineStyle="Dashed"/>
 				</box>
-				<text><![CDATA[Your notes here]]></text>
+				<text><![CDATA[Ghi chú tại đây.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="0" y="147" width="556" height="30" backcolor="#E6E8E9" uuid="36aa233d-4305-48e6-974a-1bbf89bb3c8f"/>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="110" width="556" height="30" backcolor="#E6E8E9" uuid="36aa233d-4305-48e6-974a-1bbf89bb3c8f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="9" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[THANKYOU FOR YOUR BUSINESS]]></text>
+				<text><![CDATA[XIN CẢM ƠN QUÝ KHÁCH HÀNG!]]></text>
 			</staticText>
 		</band>
 	</lastPageFooter>

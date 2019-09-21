@@ -19,6 +19,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import {createNewCustomer, getAllCustomer} from "../../api/customerapi";
 import {toast} from "react-toastify";
 import TableCustomer from "./TableCustomer";
+import Loading from "../../components/Loading";
 
 
 class CustomerManagement extends Component {
@@ -29,7 +30,7 @@ class CustomerManagement extends Component {
       nameCustomer: '',
       phoneCustomer: '',
       addressCustomer: '',
-      startDatePurchase: null,
+      startDatePurchase: new Date(),
       lastDatePurchase: null,
       customerType: '',
       note: '',
@@ -38,18 +39,16 @@ class CustomerManagement extends Component {
       listAllCustomer: null,
       returnCode: 0,
       returnMessage: '',
+      loading: false
     };
 
-    this.toggleCollapse = this.toggleCollapse.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onDrop = this.onDrop.bind(this);
-    this.handleChangeStartBuy = this.handleChangeStartBuy.bind(this);
-    this.handleChangeLastBuy = this.handleChangeLastBuy.bind(this);
   }
 
-  toggleCollapse() {
+  toggleCollapse = () => {
     this.setState({collapse: !this.state.collapse});
-  }
+  };
 
   onDrop(pictureFiles) {
     this.setState({
@@ -61,19 +60,24 @@ class CustomerManagement extends Component {
     this.setState({[event.target.name]: event.target.value})
   }
 
-  handleChangeStartBuy(date) {
+  handleChangeStartBuy = (date) => {
     this.setState({
       startDatePurchase: date
-    });
-  }
+    }, ()=>console.log("startDatePurchase: "+this.state.startDatePurchase))
+  };
 
-  handleChangeLastBuy(date) {
+  handleChangeLastBuy = (event) => {
     this.setState({
-      lastDatePurchase: date
-    });
-  }
+      lastDatePurchase: event.target.value
+    })
+  };
 
   componentDidMount() {
+    this.handleGetAllCustomer();
+  }
+
+  handleGetAllCustomer = () => {
+    this.setState({loading: true});
     getAllCustomer().then(res => {
       this.setState({
         listAllCustomer: res.data.result,
@@ -81,8 +85,10 @@ class CustomerManagement extends Component {
     }).catch(err => {
       console.log(err);
       toast.error("Lỗi hệ thống khi lấy danh sách k.hàng.")
+    }).finally(()=> {
+      this.setState({loading: false})
     })
-  }
+  };
 
   handleCreateNewCustomer = () => {
     const {
@@ -124,6 +130,9 @@ class CustomerManagement extends Component {
     const {listAllCustomer} = this.state;
     return (
         <div className="animated fadeIn parent-padding">
+          {
+            this.state.loading ? <Loading/> : null
+          }
           <Row>
             <Col>
               <Card>
@@ -133,7 +142,7 @@ class CustomerManagement extends Component {
                   <div className="card-actions">
                     <Button className="btn btn-minimize"
                             data-target="#collapseExample"
-                            onClick={this.toggleCollapse}><i
+                            onClick={()=>this.toggleCollapse()}><i
                         className="icon-arrow-up"></i>
                     </Button>
                   </div>
@@ -207,7 +216,7 @@ class CustomerManagement extends Component {
                               placeholderText={currentDate}
                               selected={this.state.startDatePurchase}
                               onChange={this.handleChangeStartBuy}
-                              dateFormat="DD/MM/YYYY"
+                              dateFormat="dd/MM/yyyy"
                           />
                         </Col>
                       </FormGroup>
@@ -220,7 +229,7 @@ class CustomerManagement extends Component {
                               className="form-control"
                               placeholderText={currentDate}
                               selected={this.state.lastDatePurchase}
-                              onChange={this.handleChangeLastBuy}
+                              onChange={(e)=>this.handleChangeLastBuy(e)}
                               dateFormat="DD/MM/YYYY"
                           />
                         </Col>

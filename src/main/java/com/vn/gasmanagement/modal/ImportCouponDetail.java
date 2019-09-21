@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ImportCouponDetail")
 public class ImportCouponDetail {
 
   @Id
@@ -18,12 +17,10 @@ public class ImportCouponDetail {
   private int id;
 
   private int idImportCoupon;
-
   private int idGas;
-
   private int Amount;
-
-  private Long importPrice;
+  private int payShellAmount;
+  private int debtShellAmount;
 
   public int getId() {
     return id;
@@ -57,11 +54,11 @@ public class ImportCouponDetail {
     Amount = amount;
   }
 
-  public Long getImportPrice() {
-    return importPrice;
-  }
+  public int getPayShellAmount() { return payShellAmount; }
 
-  public void setImportPrice(Long importPrice) {
-    this.importPrice = importPrice;
-  }
+  public void setPayShellAmount(int payShellAmount) { this.payShellAmount = payShellAmount; }
+
+  public int getDebtShellAmount() { return debtShellAmount; }
+
+  public void setDebtShellAmount(int debtShellAmount) { this.debtShellAmount = debtShellAmount; }
 }

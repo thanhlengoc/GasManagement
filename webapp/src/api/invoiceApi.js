@@ -14,14 +14,9 @@ export function exportInvoice(requestParam) {
 }
 
 export function getListInvoice(customerId) {
-  return httpGet(BASE_URL + "/list-invoice?" + customerId);
+  return httpGet(BASE_URL + "/list-invoice-customer?customerId=" + customerId);
 }
 
 export function getListInOutInvoice(request) {
-  if (request) {
     return httpGet(BASE_URL + "/data-in-out?dateFrom="+request.dateFrom+"&dateTo="+request.dateTo);
-  }
-  else {
-    return null;
-  }
 }

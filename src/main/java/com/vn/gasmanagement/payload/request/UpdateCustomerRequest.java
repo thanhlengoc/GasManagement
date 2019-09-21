@@ -2,32 +2,30 @@ package com.vn.gasmanagement.payload.request;
 
 public class UpdateCustomerRequest {
 
-  private int cusId;
+  private Long cusId;
   private String cusType;
   private String cusName;
   private String cusPhone;
   private String cusAddress;
-  private String startBuy;
   private String lastBuy;
   private String note;
 
-  public UpdateCustomerRequest(int cusId, String cusType, String cusName, String cusPhone,
-      String cusAddress, String startBuy, String lastBuy, String note) {
+  public UpdateCustomerRequest(Long cusId, String cusType, String cusName, String cusPhone,
+      String cusAddress, String lastBuy, String note) {
     this.cusId = cusId;
     this.cusType = cusType;
     this.cusName = cusName;
     this.cusPhone = cusPhone;
     this.cusAddress = cusAddress;
-    this.startBuy = startBuy;
     this.lastBuy = lastBuy;
     this.note = note;
   }
 
-  public int getCusId() {
+  public Long getCusId() {
     return cusId;
   }
 
-  public void setCusId(int cusId) {
+  public void setCusId(Long cusId) {
     this.cusId = cusId;
   }
 
@@ -61,14 +59,6 @@ public class UpdateCustomerRequest {
 
   public void setCusAddress(String cusAddress) {
     this.cusAddress = cusAddress;
-  }
-
-  public String getStartBuy() {
-    return startBuy;
-  }
-
-  public void setStartBuy(String startBuy) {
-    this.startBuy = startBuy;
   }
 
   public String getLastBuy() {

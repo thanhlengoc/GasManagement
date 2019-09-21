@@ -7,6 +7,7 @@ import com.vn.gasmanagement.payload.response.BaseResponse;
 import com.vn.gasmanagement.repository.CustomerRepository;
 import com.vn.gasmanagement.service.CustomerService;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,12 +58,12 @@ public class CustomerServiceImpl implements CustomerService {
   @Override
   public BaseResponse updateCustomer(UpdateCustomerRequest request) {
     try {
-      Customer customer = customerRepository.findById(request.getCusId()).get();
-      if (customer != null) {
-        customer.setCustomerName(request.getCusName());
+      Optional<Customer> optionalCustomer = customerRepository.findById(Long.valueOf(request.getCusId()));
+      if (optionalCustomer.isPresent()) {
+        Customer customer = optionalCustomer.get();
         customer.setCustomerType(request.getCusType());
+        customer.setCustomerName(request.getCusName());
         customer.setCustomerPhone(request.getCusPhone());
-        customer.setStartDateBuy(request.getStartBuy());
         customer.setCustomerAddress(request.getCusAddress());
         customer.setLastPurchaseDate(request.getLastBuy());
         customer.setNote(request.getNote());

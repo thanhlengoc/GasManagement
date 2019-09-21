@@ -3,14 +3,16 @@ package com.vn.gasmanagement.modal;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
-@Table(name = "ImportCoupon")
 public class ImportCoupon {
 
   @Id
@@ -18,12 +20,10 @@ public class ImportCoupon {
   @Column(name = "Id", unique = true, nullable = false)
   private int id;
 
-  private int idPayShell;
-
-  private int idDebt;
-
   @Column(name = "dateAdded")
   private Date dateAdded;
+
+  private Long dateAddedMilisec;
 
   @Column(name = "personAdded")
   private String personAdded;
@@ -32,12 +32,26 @@ public class ImportCoupon {
   private int totalAmount;
 
   @Column(name = "totalMoney")
-  private Long totalMoney;
+  private Integer totalMoney;
 
-  private Long payment;
+  private Integer payment;
 
+  private int valve;
+  private int stove;
+  private int torch;
+
+  private int priceValveIn;
+  private int priceStoveIn;
+  private int priceTorchIn;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "promotion_id", referencedColumnName = "id")
+  private Promotion promotion;
+
+  private int totalShellPay;
+  private int totalDebt;
+  private int debtMoney;
   private String other;
-
   private String note;
 
   public int getId() {
@@ -48,21 +62,17 @@ public class ImportCoupon {
     this.id = id;
   }
 
-  public int getIdPayShell() {
-    return idPayShell;
-  }
-
-  public void setIdPayShell(int idPayShell) {
-    this.idPayShell = idPayShell;
-  }
-
-  public int getIdDebt() { return idDebt; }
-
-  public void setIdDebt(int idDebt) { this.idDebt = idDebt; }
-
   public Date getDateAdded() { return dateAdded; }
 
   public void setDateAdded(Date dateAdded) { this.dateAdded = dateAdded; }
+
+  public Long getDateAddedMilisec() {
+    return dateAddedMilisec;
+  }
+
+  public void setDateAddedMilisec(Long dateAddedMilisec) {
+    this.dateAddedMilisec = dateAddedMilisec;
+  }
 
   public String getPersonAdded() {
     return personAdded;
@@ -80,17 +90,29 @@ public class ImportCoupon {
     this.totalAmount = totalAmount;
   }
 
-  public Long getTotalMoney() {
+  public Integer getTotalMoney() {
     return totalMoney;
   }
 
-  public void setTotalMoney(Long totalMoney) {
+  public void setTotalMoney(Integer totalMoney) {
     this.totalMoney = totalMoney;
   }
 
-  public Long getPayment() { return payment; }
+  public Integer getPayment() { return payment; }
 
-  public void setPayment(Long payment) { this.payment = payment; }
+  public void setPayment(Integer payment) { this.payment = payment; }
+
+  public int getTotalShellPay() { return totalShellPay; }
+
+  public void setTotalShellPay(int totalShellPay) { this.totalShellPay = totalShellPay; }
+
+  public int getTotalDebt() { return totalDebt; }
+
+  public void setTotalDebt(int totalDebt) { this.totalDebt = totalDebt; }
+
+  public int getDebtMoney() { return debtMoney; }
+
+  public void setDebtMoney(int debtMoney) { this.debtMoney = debtMoney; }
 
   public String getOther() {
     return other;
@@ -106,5 +128,61 @@ public class ImportCoupon {
 
   public void setNote(String note) {
     this.note = note;
+  }
+
+  public int getValve() {
+    return valve;
+  }
+
+  public void setValve(int valve) {
+    this.valve = valve;
+  }
+
+  public int getStove() {
+    return stove;
+  }
+
+  public void setStove(int stove) {
+    this.stove = stove;
+  }
+
+  public int getTorch() {
+    return torch;
+  }
+
+  public void setTorch(int torch) {
+    this.torch = torch;
+  }
+
+  public int getPriceValveIn() {
+    return priceValveIn;
+  }
+
+  public void setPriceValveIn(int priceValveIn) {
+    this.priceValveIn = priceValveIn;
+  }
+
+  public int getPriceStoveIn() {
+    return priceStoveIn;
+  }
+
+  public void setPriceStoveIn(int priceStoveIn) {
+    this.priceStoveIn = priceStoveIn;
+  }
+
+  public int getPriceTorchIn() {
+    return priceTorchIn;
+  }
+
+  public void setPriceTorchIn(int priceTorchIn) {
+    this.priceTorchIn = priceTorchIn;
+  }
+
+  public Promotion getPromotion() {
+    return promotion;
+  }
+
+  public void setPromotion(Promotion promotion) {
+    this.promotion = promotion;
   }
 }

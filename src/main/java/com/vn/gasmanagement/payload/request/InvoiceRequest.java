@@ -1,9 +1,10 @@
 package com.vn.gasmanagement.payload.request;
 
-public class InvoiceRequest {
+import com.vn.gasmanagement.modal.Promotion;
 
+public class InvoiceRequest {
   private String dateOut;
-  private int userSale;
+  private String userSale;
   private int customerPurchase;
   private Float discount;
   private int elf6kg;
@@ -11,24 +12,30 @@ public class InvoiceRequest {
   private int elf39kg;
   private int b12;
   private int b45;
-  private String other;
-  private String unit;
-  private String regainElf6kg;
-  private String regainElf12kg;
-  private String regainElf39kg;
-  private String regainB12;
-  private String regainB45;
-  private int oil;
-  private int sugar;
-  private int glass;
+  private int total12;
+  private int valve;
+  private int stove;
+  private int torch;
+  private int priceValve;
+  private int priceStove;
+  private int priceTorch;
+  private String priceElf6;
+  private String priceElf12;
+  private String priceElf39;
+  private String priceB12;
+  private String priceB45;
+  private String priceTotal12;
+  private String otherFeeContent;
+  private int otherFee;
+  private int regainElf6kg;
+  private int regainElf12kg;
+  private int regainElf39kg;
+  private int regainB12;
+  private int regainB45;
+  private int regainTotal12;
+  private Promotion promotion;
   private Long totalMoney;
   private Long payment;
-  private int debtMoneyCus;
-  private int debtElf6kgCus;
-  private int debtElf12kgCus;
-  private int debtElf39kgCus;
-  private int debtB12Cus;
-  private int debtB45Cus;
   private String note;
 
   public String getDateOut() {
@@ -39,11 +46,11 @@ public class InvoiceRequest {
     this.dateOut = dateOut;
   }
 
-  public int getUserSale() {
+  public String getUserSale() {
     return userSale;
   }
 
-  public void setUserSale(int userSale) {
+  public void setUserSale(String userSale) {
     this.userSale = userSale;
   }
 
@@ -103,84 +110,112 @@ public class InvoiceRequest {
     this.b45 = b45;
   }
 
-  public String getOther() {
-    return other;
+  public String getOtherFeeContent() {
+    return otherFeeContent;
   }
 
-  public void setOther(String other) {
-    this.other = other;
+  public void setOtherFeeContent(String otherFeeContent) {
+    this.otherFeeContent = otherFeeContent;
   }
 
-  public String getUnit() {
-    return unit;
+  public int getOtherFee() {
+    return otherFee;
   }
 
-  public void setUnit(String unit) {
-    this.unit = unit;
+  public void setOtherFee(int otherFee) {
+    this.otherFee = otherFee;
   }
 
-  public String getRegainElf6kg() {
+  public int getTotal12() { return total12; }
+
+  public void setTotal12(int total12) { this.total12 = total12; }
+
+  public String getPriceElf6() {
+    return priceElf6;
+  }
+
+  public void setPriceElf6(String priceElf6) {
+    this.priceElf6 = priceElf6;
+  }
+
+  public String getPriceElf12() {
+    return priceElf12;
+  }
+
+  public void setPriceElf12(String priceElf12) {
+    this.priceElf12 = priceElf12;
+  }
+
+  public String getPriceElf39() {
+    return priceElf39;
+  }
+
+  public void setPriceElf39(String priceElf39) {
+    this.priceElf39 = priceElf39;
+  }
+
+  public String getPriceB12() {
+    return priceB12;
+  }
+
+  public void setPriceB12(String priceB12) {
+    this.priceB12 = priceB12;
+  }
+
+  public String getPriceB45() {
+    return priceB45;
+  }
+
+  public void setPriceB45(String priceB45) {
+    this.priceB45 = priceB45;
+  }
+
+  public String getPriceTotal12() {
+    return priceTotal12;
+  }
+
+  public void setPriceTotal12(String priceTotal12) {
+    this.priceTotal12 = priceTotal12;
+  }
+
+  public int getRegainElf6kg() {
     return regainElf6kg;
   }
 
-  public void setRegainElf6kg(String regainElf6kg) {
+  public void setRegainElf6kg(int regainElf6kg) {
     this.regainElf6kg = regainElf6kg;
   }
 
-  public String getRegainElf12kg() {
+  public int getRegainElf12kg() {
     return regainElf12kg;
   }
 
-  public void setRegainElf12kg(String regainElf12kg) {
+  public void setRegainElf12kg(int regainElf12kg) {
     this.regainElf12kg = regainElf12kg;
   }
 
-  public String getRegainElf39kg() {
+  public int getRegainElf39kg() {
     return regainElf39kg;
   }
 
-  public void setRegainElf39kg(String regainElf39kg) {
+  public void setRegainElf39kg(int regainElf39kg) {
     this.regainElf39kg = regainElf39kg;
   }
 
-  public String getRegainB12() {
+  public int getRegainB12() {
     return regainB12;
   }
 
-  public void setRegainB12(String regainB12) {
+  public void setRegainB12(int regainB12) {
     this.regainB12 = regainB12;
   }
 
-  public String getRegainB45() {
+  public int getRegainB45() {
     return regainB45;
   }
 
-  public void setRegainB45(String regainB45) {
+  public void setRegainB45(int regainB45) {
     this.regainB45 = regainB45;
-  }
-
-  public int getOil() {
-    return oil;
-  }
-
-  public void setOil(int oil) {
-    this.oil = oil;
-  }
-
-  public int getSugar() {
-    return sugar;
-  }
-
-  public void setSugar(int sugar) {
-    this.sugar = sugar;
-  }
-
-  public int getGlass() {
-    return glass;
-  }
-
-  public void setGlass(int glass) {
-    this.glass = glass;
   }
 
   public Long getTotalMoney() {
@@ -199,59 +234,75 @@ public class InvoiceRequest {
     this.payment = payment;
   }
 
-  public int getDebtMoneyCus() {
-    return debtMoneyCus;
-  }
-
-  public void setDebtMoneyCus(int debtMoneyCus) {
-    this.debtMoneyCus = debtMoneyCus;
-  }
-
-  public int getDebtElf6kgCus() {
-    return debtElf6kgCus;
-  }
-
-  public void setDebtElf6kgCus(int debtElf6kgCus) {
-    this.debtElf6kgCus = debtElf6kgCus;
-  }
-
-  public int getDebtElf12kgCus() {
-    return debtElf12kgCus;
-  }
-
-  public void setDebtElf12kgCus(int debtElf12kgCus) {
-    this.debtElf12kgCus = debtElf12kgCus;
-  }
-
-  public int getDebtElf39kgCus() {
-    return debtElf39kgCus;
-  }
-
-  public void setDebtElf39kgCus(int debtElf39kgCus) {
-    this.debtElf39kgCus = debtElf39kgCus;
-  }
-
-  public int getDebtB12Cus() {
-    return debtB12Cus;
-  }
-
-  public void setDebtB12Cus(int debtB12Cus) {
-    this.debtB12Cus = debtB12Cus;
-  }
-
-  public int getDebtB45Cus() {
-    return debtB45Cus;
-  }
-
-  public void setDebtB45Cus(int debtB45Cus) {
-    this.debtB45Cus = debtB45Cus;
-  }
-
   public String getNote() {
     return note;
   }
 
   public void setNote(String note) {
     this.note = note;
+  }
+
+  public int getValve() {
+    return valve;
+  }
+
+  public void setValve(int valve) {
+    this.valve = valve;
+  }
+
+  public int getStove() {
+    return stove;
+  }
+
+  public void setStove(int stove) {
+    this.stove = stove;
+  }
+
+  public int getTorch() {
+    return torch;
+  }
+
+  public void setTorch(int torch) {
+    this.torch = torch;
+  }
+
+  public int getPriceValve() {
+    return priceValve;
+  }
+
+  public void setPriceValve(int priceValve) {
+    this.priceValve = priceValve;
+  }
+
+  public int getPriceStove() {
+    return priceStove;
+  }
+
+  public void setPriceStove(int priceStove) {
+    this.priceStove = priceStove;
+  }
+
+  public int getPriceTorch() {
+    return priceTorch;
+  }
+
+  public void setPriceTorch(int priceTorch) {
+    this.priceTorch = priceTorch;
+  }
+
+  public Promotion getPromotion() {
+    return promotion;
+  }
+
+  public void setPromotion(Promotion promotion) {
+    this.promotion = promotion;
+  }
+
+  public int getRegainTotal12() {
+    return regainTotal12;
+  }
+
+  public void setRegainTotal12(int regainTotal12) {
+    this.regainTotal12 = regainTotal12;
   }
 }

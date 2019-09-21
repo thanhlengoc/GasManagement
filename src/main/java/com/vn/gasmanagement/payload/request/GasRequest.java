@@ -6,11 +6,11 @@ public class GasRequest {
   private String code;
   private Float weight;
   private String color;
-  private Long unitPriceIn;
-  private Long unitPriceOut;
+  private Integer unitPriceIn;
+  private Integer unitPriceOut;
 
   public GasRequest(String gasName, String code, Float weight, String color,
-      Long unitPriceIn, Long unitPriceOut) {
+      Integer unitPriceIn, Integer unitPriceOut) {
     this.gasName = gasName;
     this.code = code;
     this.weight = weight;
@@ -51,11 +51,19 @@ public class GasRequest {
     this.color = color;
   }
 
-  public Long getUnitPriceIn() { return unitPriceIn; }
+  public Integer getUnitPriceIn() {
+    return unitPriceIn;
+  }
 
-  public void setUnitPriceIn(Long unitPriceIn) { this.unitPriceIn = unitPriceIn; }
+  public void setUnitPriceIn(Integer unitPriceIn) {
+    this.unitPriceIn = unitPriceIn;
+  }
 
-  public Long getUnitPriceOut() { return unitPriceOut; }
+  public Integer getUnitPriceOut() {
+    return unitPriceOut;
+  }
 
-  public void setUnitPriceOut(Long unitPriceOut) { this.unitPriceOut = unitPriceOut; }
+  public void setUnitPriceOut(Integer unitPriceOut) {
+    this.unitPriceOut = unitPriceOut;
+  }
 }
