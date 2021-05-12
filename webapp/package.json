@@ -41,7 +41,7 @@
     "bootstrap": "^4.0.0",
     "chart.js": "^2.7.3",
     "classnames": "^2.2.6",
-    "codemirror": "5.33.0",
+    "codemirror": "5.58.2",
     "flag-icon-css": "2.9.0",
     "font-awesome": "^4.7.0",
     "history": "4.7.2",
