@@ -45,7 +45,7 @@
     "flag-icon-css": "2.9.0",
     "font-awesome": "^4.7.0",
     "history": "4.7.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "react": "^16.3.0",
     "react-addons-shallow-compare": "^15.6.2",
     "react-big-calendar": "0.17.0",
